@@ -1,0 +1,178 @@
+{
+  "product": {
+    "name": "Vulcan OmniPro 220",
+    "brand": "Vulcan",
+    "retailer": "Harbor Freight",
+    "item_number": "57812",
+    "type": "Multiprocess Welding System",
+    "processes": ["MIG", "Flux-Cored", "TIG", "Stick"],
+    "input_voltages": ["120VAC/60Hz", "240VAC/60Hz"],
+    "maximum_ocv": "86VDC",
+    "support_phone": "1-800-444-3353",
+    "support_email": "productsupport@harborfreight.com",
+    "website": "https://www.harborfreight.com",
+    "warranty": "Limited 90 Day Warranty"
+  },
+
+  "specifications": {
+    "MIG": {
+      "120VAC": {
+        "current_input_at_output": "20.8A at 100A",
+        "welding_current_range": "30-140A",
+        "rated_duty_cycles": [
+          {"duty_cycle_pct": 40, "amperage": 100, "weld_minutes": 4, "rest_minutes": 6},
+          {"duty_cycle_pct": 100, "amperage": 75, "weld_minutes": 10, "rest_minutes": 0}
+        ]
+      },
+      "240VAC": {
+        "current_input_at_output": "25.5A at 200A",
+        "welding_current_range": "30-220A",
+        "rated_duty_cycles": [
+          {"duty_cycle_pct": 25, "amperage": 200, "weld_minutes": 2.5, "rest_minutes": 7.5},
+          {"duty_cycle_pct": 100, "amperage": 115, "weld_minutes": 10, "rest_minutes": 0}
+        ]
+      },
+      "maximum_ocv": "86VDC",
+      "weldable_materials": ["Mild Steel", "Stainless Steel", "Aluminum (with optional Spool Gun)"],
+      "welding_wire_capacity": {
+        "solid_core": ["0.025\"", "0.030\"", "0.035\""],
+        "flux_cored": ["0.030\"", "0.035\"", "0.045\""]
+      },
+      "wire_speed": "50-500 IPM",
+      "wire_spool_capacity": "Up to 12 lb spool"
+    },
+
+    "TIG": {
+      "120VAC": {
+        "current_input_at_output": "20.6A at 125A",
+        "welding_current_range": "10-125A",
+        "rated_duty_cycles": [
+          {"duty_cycle_pct": 40, "amperage": 125, "weld_minutes": 4, "rest_minutes": 6},
+          {"duty_cycle_pct": 100, "amperage": 90, "weld_minutes": 10, "rest_minutes": 0}
+        ]
+      },
+      "240VAC": {
+        "current_input_at_output": "15.6A at 175A",
+        "welding_current_range": "10-175A",
+        "rated_duty_cycles": [
+          {"duty_cycle_pct": 30, "amperage": 175, "weld_minutes": 3, "rest_minutes": 7},
+          {"duty_cycle_pct": 100, "amperage": 105, "weld_minutes": 10, "rest_minutes": 0}
+        ]
+      },
+      "maximum_ocv": "86VDC",
+      "weldable_materials": ["Mild Steel", "Stainless Steel", "Chrome Moly"],
+      "shielding_gas": "100% Argon",
+      "gas_flow_rate_scfh": "10-25"
+    },
+
+    "Stick": {
+      "120VAC": {
+        "current_input_at_output": "19.5A at 80A",
+        "welding_current_range": "10-80A",
+        "rated_duty_cycles": [
+          {"duty_cycle_pct": 40, "amperage": 80, "weld_minutes": 4, "rest_minutes": 6},
+          {"duty_cycle_pct": 100, "amperage": 60, "weld_minutes": 10, "rest_minutes": 0}
+        ]
+      },
+      "240VAC": {
+        "current_input_at_output": "23.7A at 175A",
+        "welding_current_range": "10-175A",
+        "rated_duty_cycles": [
+          {"duty_cycle_pct": 25, "amperage": 175, "weld_minutes": 2.5, "rest_minutes": 7.5},
+          {"duty_cycle_pct": 100, "amperage": 100, "weld_minutes": 10, "rest_minutes": 0}
+        ]
+      },
+      "maximum_ocv": "86VDC",
+      "weldable_materials": ["Mild Steel", "Stainless Steel"]
+    }
+  },
+
+  "polarity_configurations": {
+    "MIG_solid_core": {
+      "polarity": "DCEP",
+      "description": "Direct Current Electrode Positive",
+      "wire_feed_power_cable": "Positive (+) Socket",
+      "ground_clamp_cable": "Negative (-) Socket",
+      "shielding_gas": "Required (75/25 Ar/CO2 or C100)",
+      "manual_page": 14
+    },
+    "Flux-Cored_gasless": {
+      "polarity": "DCEN",
+      "description": "Direct Current Electrode Negative",
+      "wire_feed_power_cable": "Negative (-) Socket",
+      "ground_clamp_cable": "Positive (+) Socket",
+      "shielding_gas": "None required",
+      "manual_page": 13
+    },
+    "TIG": {
+      "polarity": "DCEN",
+      "description": "Direct Current Electrode Negative",
+      "tig_torch_cable": "Negative (-) Socket",
+      "ground_clamp_cable": "Positive (+) Socket",
+      "shielding_gas": "100% Argon",
+      "foot_pedal": "Connect to Foot Pedal Socket inside welder",
+      "manual_page": 24
+    },
+    "Stick": {
+      "polarity": "DCEP",
+      "description": "Direct Current Electrode Positive",
+      "electrode_holder_cable": "Positive (+) Socket",
+      "ground_clamp_cable": "Negative (-) Socket",
+      "shielding_gas": "None required",
+      "manual_page": 27
+    }
+  },
+
+  "duty_cycle_explanation": {
+    "definition": "The number of minutes, within a 10 minute period, during which a given welder can produce a particular welding current without overheating.",
+    "example": "A welder with a 40% duty cycle at 125A welding current must be allowed to rest for at least 6 minutes after every 4 minutes of continuous welding.",
+    "thermal_protection": "The welder has an internal thermal protection system. When overheated, it automatically shuts down and a warning screen appears on the LCD Display. It automatically returns to service after cooling off.",
+    "cooling_tip": "Allow the welder to cool with the Power Switch on, so that the internal fan will help cool the welder."
+  },
+
+  "feed_roller_configuration": {
+    "solid_core_v_groove": {
+      "side_A": "0.030/0.035 groove",
+      "side_B": "0.025 groove"
+    },
+    "flux_cored_knurled_groove": {
+      "side_C": "0.045 groove",
+      "side_D": "0.030/0.035 groove"
+    },
+    "tension_settings": {
+      "solid_wire": "3-5 on tension scale",
+      "flux_cored_wire": "2-3 on tension scale",
+      "note": "Too much force on flux-cored wire will crush it and may cause feeding issues."
+    }
+  },
+
+  "wire_specifications": {
+    "solid_core_diameters": ["0.025\"", "0.030\"", "0.035\""],
+    "flux_cored_diameters": ["0.030\"", "0.035\"", "0.045\""],
+    "wire_speed_range": "50-500 IPM",
+    "spool_sizes": {
+      "small": "1-2 lb spool (direct mount)",
+      "large": "10-12 lb spool (requires Spool Adapter)"
+    }
+  },
+
+  "power_requirements": {
+    "120VAC": {
+      "outlet_type": "GFCI protected, 20 amp rated",
+      "circuit_breaker": "Delayed action-type circuit breaker or fuses"
+    },
+    "240VAC": {
+      "outlet_type": "240V outlet",
+      "circuit_breaker": "Delayed action-type circuit breaker or fuses"
+    },
+    "note": "Plug will only fit one way. Do not use an extension cord."
+  },
+
+  "contact_tip_sizes": {
+    "0.025_wire": "0.025\" contact tip",
+    "0.030_wire": "0.030\" contact tip",
+    "0.035_wire": "0.035\" contact tip",
+    "0.045_wire": "0.045\" contact tip",
+    "note": "Contact tip size must match wire diameter being used."
+  }
+}

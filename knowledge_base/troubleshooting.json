@@ -1,0 +1,365 @@
+{
+  "mig_flux_cored": {
+    "source_pages": [42, 43],
+    "problems": [
+      {
+        "problem": "Wire Feed Motor Runs but Wire Does Not Feed Properly",
+        "causes_and_solutions": [
+          {
+            "cause": "Insufficient wire feed pressure",
+            "solution": "Increase wire feed pressure properly. Follow step 27 on page 17."
+          },
+          {
+            "cause": "Incorrect wire feed roller size",
+            "solution": "Flip roll to correct size. Follow the Feed Roller instructions on page 12."
+          },
+          {
+            "cause": "Damaged MIG Gun, cable, or liner assembly",
+            "solution": "Have a qualified technician inspect these parts and replace as necessary."
+          },
+          {
+            "cause": "Feed Tensioner is too tight",
+            "solution": "Loosen Feed Tensioner so it applies only enough pressure to prevent continued spinning after the Gun Trigger is released."
+          }
+        ]
+      },
+      {
+        "problem": "Wire Creates a Bird's Nest During Operation",
+        "causes_and_solutions": [
+          {
+            "cause": "Excess wire feed pressure",
+            "solution": "Adjust wire feed pressure properly. Follow step 27 on page 17."
+          },
+          {
+            "cause": "Incorrect Contact Tip size",
+            "solution": "Replace with the proper tip for wire used."
+          },
+          {
+            "cause": "MIG Gun Cable Connector not fully inserted into Wire Feed mechanism",
+            "solution": "Insert Gun Cable Connector properly. Follow steps 13 and 14 on page 13."
+          },
+          {
+            "cause": "Damaged liner",
+            "solution": "Have a qualified technician inspect and repair or replace as necessary."
+          }
+        ]
+      },
+      {
+        "problem": "Wire Stops During Welding",
+        "causes_and_solutions": [
+          {
+            "cause": "Gun cable is severely bent and Wire Feed mechanism cannot feed wire",
+            "solution": "Straighten Gun cable."
+          },
+          {
+            "cause": "Gun liner is clogged or worn",
+            "solution": "Check gun liner for obstruction. Replace if necessary."
+          },
+          {
+            "cause": "Gun liner is too small for welding wire being used",
+            "solution": "Check that gun liner is correct size for wire."
+          },
+          {
+            "cause": "Wire is tangled on the spool",
+            "solution": "Check wire for cross winding or tangled spool."
+          },
+          {
+            "cause": "Wire is not making contact with Feed Rollers",
+            "solution": "Check Feed Rollers and ensure correct groove for wire diameter is being used."
+          },
+          {
+            "cause": "Feed Roller is not making enough contact with wire or is crushing flux-cored wire",
+            "solution": "Check Feed Tensioner and ensure it is set properly."
+          }
+        ]
+      },
+      {
+        "problem": "Welding Arc Not Stable",
+        "causes_and_solutions": [
+          {
+            "cause": "Wire not feeding properly",
+            "solution": "See Wire Feed Motor troubleshooting section above."
+          },
+          {
+            "cause": "Incorrect Contact Tip or liner size or excessive wear",
+            "solution": "Replace with the proper tip or liner size for wire used."
+          },
+          {
+            "cause": "Incorrect wire feed speed",
+            "solution": "Adjust wire feed speed to achieve a more stable arc."
+          },
+          {
+            "cause": "Loose MIG Gun cable or ground cable",
+            "solution": "Check to ensure that all connections are tight."
+          },
+          {
+            "cause": "Damaged MIG Gun or loose connection within Gun",
+            "solution": "Have a qualified technician inspect and repair/replace as necessary."
+          },
+          {
+            "cause": "Incorrect polarity for process being run",
+            "solution": "Ensure polarity is correct for operation: DCEP for MIG welding and DCEN for Flux-Cored self-shielded welding."
+          },
+          {
+            "cause": "Gas coverage may be insufficient or too high",
+            "solution": "Ensure gas flow rate is set according to Settings Chart. Make sure MIG Gun Cable Connector is fully inserted into Wire Feed mechanism with no O-Rings exposed."
+          },
+          {
+            "cause": "Poor connection with workpiece",
+            "solution": "Check the ground clamp connection to the workpiece and machine. Ensure the MIG Gun is properly secured."
+          }
+        ]
+      },
+      {
+        "problem": "Weak Arc Strength",
+        "causes_and_solutions": [
+          {
+            "cause": "Incorrect line voltage",
+            "solution": "Check the line voltage and, if insufficient, have a licensed electrician remedy the situation."
+          },
+          {
+            "cause": "Improper gauge or length of cord",
+            "solution": "Do not use an extension cord on this Welder. Use only one of the supplied power cords for this Welder or an identical replacement cord."
+          },
+          {
+            "cause": "Not enough current",
+            "solution": "Switch current to proper setting for metal thickness."
+          }
+        ]
+      },
+      {
+        "problem": "Welder Does Not Function When Switched On",
+        "causes_and_solutions": [
+          {
+            "cause": "Tripped thermal protection device",
+            "solution": "If a warning screen appears in the LCD Display window, Welder may have overheated and shut down. Stop and wait with the Power Switch ON for the Welder to cool. The Welder automatically returns to service after cooling off. Reduce duration or frequency of welding periods to help reduce wear on the Welder. Refer to Duty Cycle section on page 19."
+          },
+          {
+            "cause": "Circuit supplies insufficient input voltage or amperage",
+            "solution": "Verify that the circuit is designed to supply the required input voltage and amperage as detailed on the Specifications table. If a warning screen appears in the LCD Display window, check the input voltage to ensure it is within specified range."
+          },
+          {
+            "cause": "Faulty or improperly connected Trigger",
+            "solution": "Ensure the gun connection is properly seated on machine. Qualified technician must check and secure/replace Trigger."
+          },
+          {
+            "cause": "Machine is in low- or over-voltage protection",
+            "solution": "Check input voltage and ensure it falls within the specified range. If input voltage is correct, press Reset Button on back of machine."
+          },
+          {
+            "cause": "Machine is in the incorrect mode",
+            "solution": "Ensure the correct process has been selected."
+          }
+        ]
+      },
+      {
+        "problem": "LCD Display Does Not Light When Welder is Switched On",
+        "causes_and_solutions": [
+          {
+            "cause": "Unit is not connected to outlet properly",
+            "solution": "Verify the voltage at the outlet and the connection to the outlet."
+          },
+          {
+            "cause": "Outlet is unpowered",
+            "solution": "Check circuit breaker/GFCI devices; if any are tripped, determine and remedy cause before resetting."
+          },
+          {
+            "cause": "Plug does not have correct rating",
+            "solution": "Make sure installed plug is correct rating. See Specifications on page 7."
+          },
+          {
+            "cause": "Circuit breaker has tripped due to high input amperage",
+            "solution": "Press Reset Button on back of machine to reset circuit breaker."
+          },
+          {
+            "cause": "Input Power Cord is not seated properly",
+            "solution": "Ensure the twist lock input Power Cord is fully secured."
+          }
+        ]
+      },
+      {
+        "problem": "Wire Feeds, but Arc Does Not Ignite",
+        "causes_and_solutions": [
+          {
+            "cause": "Improper ground connection",
+            "solution": "Make certain that the workpiece is contacted properly by the Ground Clamp and that the workpiece is properly cleaned near the ground clamp and the welding location."
+          },
+          {
+            "cause": "Improperly sized Contact Tip",
+            "solution": "Verify that Contact Tip is the proper size for welding wire. If needed, replace Contact Tip with proper size and type."
+          },
+          {
+            "cause": "Excessively worn Contact Tip",
+            "solution": "Check that the hole in the tip is not deformed or enlarged. If needed, replace Contact Tip with proper size and type."
+          },
+          {
+            "cause": "Dirty Contact Tip",
+            "solution": "Properly clean Contact Tip."
+          }
+        ]
+      },
+      {
+        "problem": "Porosity in the Weld Metal",
+        "causes_and_solutions": [
+          {
+            "cause": "Shielding gas bottle is empty",
+            "solution": "Check gas bottle and replenish as necessary."
+          },
+          {
+            "cause": "Not enough or too much shielding gas",
+            "solution": "Check gas regulator to ensure proper flow."
+          },
+          {
+            "cause": "Dirty workpiece",
+            "solution": "Clean workpiece down to bare metal."
+          },
+          {
+            "cause": "Gun is being used too far away from workpiece",
+            "solution": "Check CTWD (contact tip to work distance) for the proper procedure."
+          },
+          {
+            "cause": "Polarity is incorrect for the application",
+            "solution": "Check the polarity and ensure it is DCEP for MIG and DCEN for Flux-Cored."
+          },
+          {
+            "cause": "Dirty welding wire is introducing contamination into the weld",
+            "solution": "Make certain that welding wire is clean and free of rust and residues."
+          }
+        ]
+      }
+    ]
+  },
+
+  "tig_stick": {
+    "source_pages": [44],
+    "problems": [
+      {
+        "problem": "Welder Does Not Function When Switched On",
+        "causes_and_solutions": [
+          {
+            "cause": "Tripped thermal protection device",
+            "solution": "Reduce duration or frequency of welding periods to help reduce wear on the welder. Refer to Duty Cycle (Duration of Use) on page 29."
+          },
+          {
+            "cause": "Faulty or improperly connected Trigger",
+            "solution": "Qualified technician must check and secure/replace Trigger."
+          },
+          {
+            "cause": "Ground Clamp not attached to workpiece",
+            "solution": "Attach Ground Clamp to workpiece."
+          },
+          {
+            "cause": "Shielding Gas not connected",
+            "solution": "Connect shielding gas to Welder."
+          }
+        ]
+      },
+      {
+        "problem": "LCD Display Does Not Light When Welder is Switched On",
+        "causes_and_solutions": [
+          {
+            "cause": "Unit is not connected to outlet properly",
+            "solution": "Verify the voltage at the outlet and the connection to the outlet."
+          },
+          {
+            "cause": "Outlet is unpowered",
+            "solution": "Check circuit breaker/GFCI devices; if any are tripped, determine and remedy cause before resetting. Verify that the circuit is designed to supply the required input amperage as detailed in Specifications on page 7."
+          }
+        ]
+      },
+      {
+        "problem": "Weak Arc Strength",
+        "causes_and_solutions": [
+          {
+            "cause": "Incorrect line voltage",
+            "solution": "Check the line voltage and, if insufficient, have a licensed electrician remedy the situation."
+          },
+          {
+            "cause": "Improper gauge or length of cord",
+            "solution": "Do not use an extension cord on this Welder. Use only one of the supplied power cords for this Welder or an identical replacement cord."
+          }
+        ]
+      },
+      {
+        "problem": "Welding Arc Not Stable",
+        "causes_and_solutions": [
+          {
+            "cause": "Loose electrode cable or ground cable",
+            "solution": "Check to ensure that all connections are tight."
+          },
+          {
+            "cause": "Damaged electrode holder or loose connection within electrode holder",
+            "solution": "Have a qualified technician inspect and repair/replace as necessary."
+          },
+          {
+            "cause": "Adjust current setting",
+            "solution": "Make sure setting matches recommended setting on chart."
+          },
+          {
+            "cause": "Shielding gas getting low",
+            "solution": "Replace shielding gas cylinder."
+          }
+        ]
+      }
+    ]
+  },
+
+  "weld_diagnosis": {
+    "source_page": 35,
+    "heat_control": {
+      "inadequate_penetration": {
+        "symptom": "Not hot enough",
+        "fixes": [
+          "Increase weld current",
+          "Decrease travel speed",
+          "Use faster wire feed",
+          "Use shorter CTWD"
+        ]
+      },
+      "proper_penetration": {
+        "symptom": "Ideal heat"
+      },
+      "excess_penetration_burn_through": {
+        "symptom": "Too hot",
+        "fixes": [
+          "Decrease weld current",
+          "Increase travel speed",
+          "Use slower wire feed",
+          "Use longer CTWD"
+        ]
+      }
+    },
+    "wire_weld_examples": [
+      {
+        "appearance": "Good Weld",
+        "diagnosis": "Correct settings",
+        "action": "No correction needed"
+      },
+      {
+        "appearance": "Voltage Too Low or Wire Feed Too Slow",
+        "diagnosis": "Insufficient heat input",
+        "action": "Increase Output Voltage or Increase Wire Feed Speed"
+      },
+      {
+        "appearance": "Voltage Too High or Wire Feed Too Fast",
+        "diagnosis": "Excessive heat input",
+        "action": "Decrease Output Voltage or Decrease Wire Feed Speed"
+      },
+      {
+        "appearance": "Travel Speed Too Fast",
+        "diagnosis": "Insufficient weld deposit",
+        "action": "Travel slower"
+      },
+      {
+        "appearance": "Travel Speed Too Slow",
+        "diagnosis": "Excessive weld deposit",
+        "action": "Travel faster"
+      },
+      {
+        "appearance": "CTWD Too Long or Wrong Polarity",
+        "diagnosis": "Poor arc characteristics",
+        "action": "Check polarity and maintain less than 1/2 inch CTWD"
+      }
+    ]
+  }
+}

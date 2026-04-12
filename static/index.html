@@ -1,0 +1,1731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROX - Vulcan OmniPro 220</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #ffffff;
+    --surface: #f7f7f8;
+    --surface-2: #eeeff1;
+    --border: #d8d9dc;
+    --text: #2c2c2e;
+    --text-dim: #86878b;
+    --text-bright: #111113;
+    --accent: #111113;
+    --green: #16a34a;
+    --yellow: #ca8a04;
+    --red: #dc2626;
+    --blue: #2563eb;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Inter', -apple-system, sans-serif;
+  }
+
+  body {
+    font-family: var(--mono);
+    background: var(--bg);
+    color: var(--text);
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ---- HEADER ---- */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--text-bright);
+  }
+  .logo {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: 6px;
+    color: #ffffff;
+  }
+  .header-meta {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+  }
+  .meta-label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+  }
+  .meta-value {
+    font-size: 12px;
+    font-weight: 600;
+    color: #ffffff;
+  }
+  .voltage-toggle {
+    display: flex;
+    gap: 4px;
+  }
+  .voltage-btn {
+    padding: 4px 10px;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: transparent;
+    color: rgba(255,255,255,0.5);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .voltage-btn.active {
+    background: #ffffff;
+    color: var(--text-bright);
+    border-color: #ffffff;
+  }
+
+  /* ---- MAIN LAYOUT ---- */
+  .main {
+    display: grid;
+    grid-template-columns: 220px 1fr 280px;
+    height: calc(100vh - 53px);
+  }
+
+  /* ---- LEFT PANEL ---- */
+  .left-panel {
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    background: var(--surface);
+  }
+  .panel-title {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    padding: 16px 16px 8px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .process-list {
+    padding: 0 8px;
+  }
+  .process-item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 10px 10px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-bottom: 2px;
+  }
+  .process-item:hover {
+    background: var(--surface-2);
+  }
+  .process-item.active {
+    border-color: transparent;
+    border-left: 3px solid var(--text-bright);
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .process-name {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-bright);
+    line-height: 1.3;
+  }
+  .process-sub {
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+  }
+  .process-num {
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--text-dim);
+    line-height: 1;
+  }
+
+  /* ---- CENTER (CHAT) ---- */
+  .center-panel {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+    overflow: hidden;
+    min-height: 0;
+  }
+  .chat-header {
+    padding: 16px 20px 8px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .chat-header h2 {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .chat-messages {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .msg {
+    max-width: 100%;
+  }
+  .msg-sender {
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .msg-sender.agent { color: var(--green); }
+  .msg-body {
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text);
+    background: var(--surface);
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+  }
+  .msg-body.user-msg {
+    background: var(--text-bright);
+    border-color: var(--text-bright);
+    color: #ffffff;
+  }
+  .msg-body.user-msg strong { color: #ffffff; }
+  .msg-body p { margin-bottom: 8px; }
+  .msg-body p:last-child { margin-bottom: 0; }
+  .msg-body strong { color: var(--text-bright); font-weight: 700; }
+  .msg-body ol, .msg-body ul { padding-left: 20px; margin: 8px 0; }
+  .msg-body li { margin-bottom: 4px; }
+  .msg-body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+    font-size: 12px;
+  }
+  .msg-body th, .msg-body td {
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    text-align: left;
+  }
+  .msg-body th {
+    background: var(--surface-2);
+    color: var(--text-bright);
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .msg-body code {
+    background: var(--surface-2);
+    padding: 2px 6px;
+    font-size: 12px;
+    border-radius: 3px;
+  }
+  .msg-body blockquote {
+    border-left: 3px solid var(--yellow);
+    padding: 8px 12px;
+    margin: 8px 0;
+    background: rgba(202, 138, 4, 0.06);
+    color: #92400e;
+    font-size: 12px;
+    border-radius: 0 4px 4px 0;
+  }
+  .msg-body h2, .msg-body h3 {
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: var(--text-bright);
+    margin: 12px 0 6px;
+    text-transform: uppercase;
+  }
+
+  .typing-indicator {
+    display: none;
+    padding: 14px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+  }
+  .typing-indicator.visible { display: block; }
+  .typing-dots {
+    display: flex;
+    gap: 4px;
+  }
+  .typing-dots span {
+    width: 6px;
+    height: 6px;
+    background: var(--text-dim);
+    border-radius: 50%;
+    animation: blink 1.4s infinite;
+  }
+  .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes blink {
+    0%, 80%, 100% { opacity: 0.3; }
+    40% { opacity: 1; }
+  }
+
+  .chat-input-area {
+    padding: 12px 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .chat-input {
+    flex: 1;
+    font-family: var(--sans);
+    font-size: 14px;
+    padding: 14px 16px;
+    background: #ffffff;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .chat-input:focus {
+    border-color: var(--text-bright);
+    box-shadow: 0 0 0 3px rgba(17,17,19,0.06);
+  }
+  .chat-input::placeholder {
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+  .send-btn {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 12px 24px;
+    background: var(--text-bright);
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-transform: uppercase;
+  }
+  .send-btn:hover { background: #333; }
+  .send-btn:disabled {
+    background: var(--surface-2);
+    color: var(--text-dim);
+    cursor: not-allowed;
+  }
+
+  /* Voice button */
+  .voice-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    background: #ffffff;
+    cursor: pointer;
+    transition: all 0.15s;
+    flex-shrink: 0;
+    color: var(--text-dim);
+  }
+  .voice-btn:hover {
+    border-color: var(--text);
+    color: var(--text);
+  }
+  .voice-btn.listening {
+    border-color: var(--red);
+    background: rgba(220, 38, 38, 0.06);
+    color: var(--red);
+    animation: pulse-ring 1.5s ease infinite;
+  }
+  .voice-btn svg { width: 18px; height: 18px; }
+  @keyframes pulse-ring {
+    0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.3); }
+    70% { box-shadow: 0 0 0 6px rgba(220, 38, 38, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+  }
+  .voice-unsupported { display: none; }
+
+  /* ---- RIGHT PANEL ---- */
+  .right-panel {
+    border-left: 1px solid var(--border);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+  }
+  .info-card {
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .info-card-title {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  /* Duty Cycle */
+  .duty-cycle-display {
+    text-align: center;
+    padding: 12px 0;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+  }
+  .duty-voltage-label {
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+  .duty-big {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--text-bright);
+    line-height: 1;
+    transition: opacity 0.15s;
+  }
+  .info-card.flash {
+    animation: card-flash 0.4s ease;
+  }
+  @keyframes card-flash {
+    0% { background: rgba(37, 99, 235, 0.08); }
+    100% { background: transparent; }
+  }
+  .duty-big .duty-sep { color: var(--text-dim); font-weight: 300; margin: 0 4px; }
+  .duty-sub {
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 8px;
+    letter-spacing: 0.5px;
+  }
+
+  /* Polarity Card */
+  .polarity-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px;
+  }
+  .polarity-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+  }
+  .polarity-label { color: var(--text-dim); }
+  .polarity-value { color: var(--text-bright); font-weight: 600; }
+  .polarity-type {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text-bright);
+    margin-bottom: 2px;
+  }
+  .polarity-gas {
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.5px;
+  }
+
+  /* Specs table */
+  .info-table {
+    width: 100%;
+    font-size: 11px;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    border-spacing: 0;
+    overflow: hidden;
+  }
+  .info-table th {
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    text-transform: uppercase;
+    background: var(--surface);
+  }
+  .info-table td {
+    padding: 8px 12px;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+  }
+  .info-table tr:last-child td { border-bottom: none; }
+  .info-table td:last-child { text-align: right; font-weight: 600; }
+
+  /* New Chat Button */
+  .new-chat-btn {
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    padding: 5px 12px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-dim);
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.15s;
+  }
+  .new-chat-btn:hover {
+    border-color: var(--text-bright);
+    color: var(--text-bright);
+  }
+
+  /* Setup Wizard */
+  .wizard-section {
+    padding: 0 12px 16px;
+  }
+  .wizard-field {
+    margin-bottom: 8px;
+  }
+  .wizard-label {
+    display: block;
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+  .wizard-select {
+    width: 100%;
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 8px 10px;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    cursor: pointer;
+    outline: none;
+  }
+  .wizard-select:focus {
+    border-color: var(--text-bright);
+  }
+  .wizard-select:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .wizard-btn {
+    width: 100%;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 10px;
+    background: var(--text-bright);
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+    margin-top: 4px;
+    transition: background 0.15s;
+  }
+  .wizard-btn:hover {
+    background: #333;
+  }
+
+  /* Suggestion Chips */
+  .suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 0 20px 8px;
+    flex-shrink: 0;
+  }
+  .suggestion-chip {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 5px 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .suggestion-chip:hover {
+    border-color: var(--text-bright);
+    color: var(--text-bright);
+    background: var(--surface-2);
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #bbb; }
+
+  /* Page citation links */
+  .page-cite {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 1px 7px;
+    margin: 0 1px;
+    font-size: 11px;
+    font-weight: 600;
+    font-family: var(--mono);
+    color: var(--blue);
+    background: rgba(37, 99, 235, 0.06);
+    border: 1px solid rgba(37, 99, 235, 0.15);
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.15s;
+    vertical-align: baseline;
+  }
+  .page-cite:hover {
+    background: rgba(37, 99, 235, 0.12);
+    border-color: rgba(37, 99, 235, 0.3);
+  }
+  .page-cite::before {
+    content: '';
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'%3E%3C/path%3E%3Cpolyline points='14 2 14 8 20 8'%3E%3C/polyline%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    flex-shrink: 0;
+  }
+
+  /* Artifact iframes */
+  .artifact-container {
+    margin: 12px 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .artifact-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 14px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .artifact-header .artifact-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .artifact-header .artifact-badge::before {
+    content: '';
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    background: var(--green);
+    border-radius: 50%;
+  }
+  .artifact-expand-btn {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 1px;
+    padding: 3px 8px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-dim);
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+  .artifact-expand-btn:hover {
+    background: var(--surface-2);
+    color: var(--text);
+  }
+  .artifact-iframe {
+    width: 100%;
+    border: none;
+    min-height: 200px;
+    display: block;
+    transition: height 0.2s ease;
+  }
+  .artifact-error {
+    padding: 12px 14px;
+    font-size: 12px;
+    color: var(--red);
+    background: rgba(220, 38, 38, 0.04);
+    display: none;
+  }
+
+  /* Feedback widget */
+  .msg-feedback {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    padding: 6px 0;
+  }
+  .msg-feedback-label {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  .msg-feedback-btns {
+    display: flex;
+    gap: 4px;
+  }
+  .feedback-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 14px;
+    color: var(--text-dim);
+  }
+  .feedback-btn:hover {
+    border-color: var(--text);
+    background: var(--surface-2);
+    color: var(--text);
+  }
+  .feedback-btn.selected-up {
+    border-color: var(--green);
+    background: rgba(22, 163, 74, 0.08);
+    color: var(--green);
+    cursor: default;
+  }
+  .feedback-btn.selected-down {
+    border-color: var(--red);
+    background: rgba(220, 38, 38, 0.06);
+    color: var(--red);
+    cursor: default;
+  }
+  .msg-feedback-thanks {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--green);
+    display: none;
+  }
+
+  /* Fullscreen artifact overlay */
+  .artifact-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 1000;
+    padding: 24px;
+  }
+  .artifact-overlay.visible { display: flex; align-items: center; justify-content: center; }
+  .artifact-overlay-inner {
+    background: #ffffff;
+    border-radius: 10px;
+    width: 90vw;
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  }
+  .artifact-overlay-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .artifact-overlay-close {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1px;
+    padding: 4px 12px;
+    background: var(--text-bright);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+  .artifact-overlay iframe {
+    flex: 1;
+    width: 100%;
+    border: none;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">PROX</div>
+  <div class="header-meta">
+    <div style="display:flex;flex-direction:column;gap:2px">
+      <span class="meta-label">Hardware</span>
+      <span class="meta-value">VULCAN OMNIPRO 220</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:2px">
+      <span class="meta-label">Voltage Input</span>
+      <div class="voltage-toggle">
+        <button class="voltage-btn" data-v="120V" onclick="setVoltage('120V')">120V</button>
+        <button class="voltage-btn active" data-v="240V" onclick="setVoltage('240V')">240V</button>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:2px">
+      <span class="meta-label">Active Process</span>
+      <span class="meta-value" id="active-process-label">MIG / GAS SHIELDED</span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- LEFT: Setup Wizard first, then Process Select -->
+  <div class="left-panel">
+    <div class="panel-title">Quick Setup</div>
+    <div class="wizard-section">
+      <div class="wizard-field">
+        <label class="wizard-label">Material</label>
+        <select class="wizard-select" id="wizard-material" onchange="updateThicknessOptions()">
+          <option value="">Select material...</option>
+          <option value="Mild Steel">Mild Steel</option>
+          <option value="Stainless Steel">Stainless Steel</option>
+          <option value="Aluminum (Spool Gun)">Aluminum (requires Spool Gun)</option>
+          <option value="Chrome Moly">Chrome Moly (TIG only)</option>
+        </select>
+      </div>
+      <div class="wizard-field">
+        <label class="wizard-label">Thickness</label>
+        <select class="wizard-select" id="wizard-thickness" disabled>
+          <option value="">Select material first</option>
+        </select>
+      </div>
+      <button class="wizard-btn" onclick="runWizard()">GET RECOMMENDED SETTINGS</button>
+    </div>
+
+    <div style="border-top: 1px solid var(--border); margin-top: 4px;"></div>
+    <div class="panel-title">Process Select</div>
+    <div class="process-list">
+      <div class="process-item active" data-process="MIG" onclick="selectProcess(this)">
+        <div>
+          <div class="process-name">MIG (GMAW)</div>
+          <div class="process-sub">SOLID WIRE / C25-CO2</div>
+        </div>
+        <div class="process-num">01</div>
+      </div>
+      <div class="process-item" data-process="Flux-Cored" onclick="selectProcess(this)">
+        <div>
+          <div class="process-name">FLUX-CORED (FCAW)</div>
+          <div class="process-sub">SELF-SHIELDING / GASLESS</div>
+        </div>
+        <div class="process-num">02</div>
+      </div>
+      <div class="process-item" data-process="TIG" onclick="selectProcess(this)">
+        <div>
+          <div class="process-name">DC TIG (GTAW)</div>
+          <div class="process-sub">STAINLESS / STEEL / CHROME-MOLY</div>
+        </div>
+        <div class="process-num">03</div>
+      </div>
+      <div class="process-item" data-process="Stick" onclick="selectProcess(this)">
+        <div>
+          <div class="process-name">STICK (SMAW)</div>
+          <div class="process-sub">6010 / 6011 / 6013 / 7018</div>
+        </div>
+        <div class="process-num">04</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CENTER: Chat -->
+  <div class="center-panel">
+    <div class="chat-header">
+      <h2>Troubleshooting Log</h2>
+      <button class="new-chat-btn" onclick="resetChat()">NEW CHAT</button>
+    </div>
+    <div class="chat-messages" id="chat-messages">
+      <div class="msg">
+        <div class="msg-sender agent">PROX AI AGENT</div>
+        <div class="msg-body">
+          <p>Vulcan OmniPro 220 support agent online. Full owner's manual, quick-start guide, and selection chart loaded.</p>
+          <p>Describe your issue or ask about setup, specs, troubleshooting, or maintenance.</p>
+        </div>
+      </div>
+    </div>
+    <div id="typing-container" style="padding: 0 20px; flex-shrink: 0;">
+      <div class="typing-indicator" id="typing-indicator">
+        <div class="msg-sender agent">PROX AI AGENT</div>
+        <div class="typing-dots"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+    <div class="suggestions" id="suggestions"></div>
+    <div class="chat-input-area">
+      <button class="voice-btn" id="voice-btn" onclick="toggleVoice()" title="Voice input">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+          <line x1="12" y1="19" x2="12" y2="23"></line>
+          <line x1="8" y1="23" x2="16" y2="23"></line>
+        </svg>
+      </button>
+      <input type="text" class="chat-input" id="chat-input"
+             placeholder="DESCRIBE ISSUE OR ASK FOR SPECIFICATIONS..."
+             onkeydown="if(event.key==='Enter')sendMessage()">
+      <button class="send-btn" id="send-btn" onclick="sendMessage()">SEND</button>
+    </div>
+  </div>
+
+  <!-- RIGHT: Duty Cycle + Polarity + Amperage Range -->
+  <div class="right-panel">
+    <div class="info-card">
+      <div class="info-card-title">Duty Cycle</div>
+      <div class="duty-cycle-display">
+        <div class="duty-voltage-label" id="duty-voltage-label">MAX RATED @ 240V</div>
+        <div class="duty-big">
+          <span id="duty-amps">200A</span>
+          <span class="duty-sep">/</span>
+          <span id="duty-pct">25%</span>
+        </div>
+        <div class="duty-sub" id="duty-sub">WELD 2.5 MIN / REST 7.5 MIN</div>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-title">Polarity</div>
+      <div class="polarity-card" id="polarity-card">
+        <div class="polarity-type" id="polarity-type">DCEP</div>
+        <div class="polarity-gas" id="polarity-gas">GAS REQUIRED (C25 / CO2)</div>
+        <div class="polarity-row">
+          <span class="polarity-label" id="pol-label-1">WIRE FEED POWER</span>
+          <span class="polarity-value" id="pol-wire">POSITIVE (+)</span>
+        </div>
+        <div class="polarity-row">
+          <span class="polarity-label">GROUND CLAMP</span>
+          <span class="polarity-value" id="pol-ground">NEGATIVE (-)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-title">Amperage Range</div>
+      <table class="info-table">
+        <thead>
+          <tr><th>Voltage</th><th>Range</th><th>100% Duty</th></tr>
+        </thead>
+        <tbody id="amp-table-body">
+          <tr><td>120V</td><td>30 - 140A</td><td>75A</td></tr>
+          <tr><td>240V</td><td>30 - 220A</td><td>115A</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentProcess = 'MIG';
+let currentVoltage = '240V';
+let isSending = false;
+let wasVoiceInput = false;
+let sessionId = sessionStorage.getItem('prox-session') || crypto.randomUUID();
+sessionStorage.setItem('prox-session', sessionId);
+
+const processData = {
+  MIG: {
+    label: 'MIG / GAS SHIELDED',
+    polarity: 'DCEP', gas: 'GAS REQUIRED (C25 OR C100)',
+    polWire: 'POSITIVE (+)', polGround: 'NEGATIVE (-)',
+    polLabel1: 'WIRE FEED POWER',
+    duty: {
+      '240V': { amps: '200A', pct: '25%', sub: 'WELD 2.5 MIN / REST 7.5 MIN' },
+      '120V': { amps: '100A', pct: '40%', sub: 'WELD 4 MIN / REST 6 MIN' },
+    },
+    amps: { '120V': { range: '30 - 140A', cont: '75A' }, '240V': { range: '30 - 220A', cont: '115A' } },
+  },
+  'Flux-Cored': {
+    label: 'FLUX-CORED / GASLESS',
+    polarity: 'DCEN', gas: 'NO GAS REQUIRED',
+    polWire: 'NEGATIVE (-)', polGround: 'POSITIVE (+)',
+    polLabel1: 'WIRE FEED POWER',
+    duty: {
+      '240V': { amps: '200A', pct: '25%', sub: 'WELD 2.5 MIN / REST 7.5 MIN' },
+      '120V': { amps: '100A', pct: '40%', sub: 'WELD 4 MIN / REST 6 MIN' },
+    },
+    amps: { '120V': { range: '30 - 140A', cont: '75A' }, '240V': { range: '30 - 220A', cont: '115A' } },
+  },
+  TIG: {
+    label: 'DC TIG / ARGON',
+    polarity: 'DCEN', gas: '100% ARGON, 10-25 SCFH',
+    polWire: 'NEGATIVE (-)', polGround: 'POSITIVE (+)',
+    polLabel1: 'TIG TORCH',
+    duty: {
+      '240V': { amps: '175A', pct: '30%', sub: 'WELD 3 MIN / REST 7 MIN' },
+      '120V': { amps: '125A', pct: '40%', sub: 'WELD 4 MIN / REST 6 MIN' },
+    },
+    amps: { '120V': { range: '10 - 125A', cont: '90A' }, '240V': { range: '10 - 175A', cont: '105A' } },
+  },
+  Stick: {
+    label: 'STICK / SMAW',
+    polarity: 'DCEP', gas: 'NO GAS REQUIRED',
+    polWire: 'POSITIVE (+)', polGround: 'NEGATIVE (-)',
+    polLabel1: 'ELECTRODE HOLDER',
+    duty: {
+      '240V': { amps: '175A', pct: '25%', sub: 'WELD 2.5 MIN / REST 7.5 MIN' },
+      '120V': { amps: '80A', pct: '40%', sub: 'WELD 4 MIN / REST 6 MIN' },
+    },
+    amps: { '120V': { range: '10 - 80A', cont: '60A' }, '240V': { range: '10 - 175A', cont: '100A' } },
+  },
+};
+
+function selectProcess(el) {
+  document.querySelectorAll('.process-item').forEach(e => e.classList.remove('active'));
+  el.classList.add('active');
+  currentProcess = el.dataset.process;
+  updateRightPanel();
+  updateSuggestions();
+}
+
+function setVoltage(v) {
+  currentVoltage = v;
+  document.querySelectorAll('.voltage-btn').forEach(b => b.classList.toggle('active', b.dataset.v === v));
+  updateRightPanel();
+}
+
+function updateRightPanel() {
+  const p = processData[currentProcess];
+  if (!p) return;
+
+  // Flash right panel cards to confirm change
+  document.querySelectorAll('.info-card').forEach(card => {
+    card.classList.remove('flash');
+    void card.offsetWidth; // force reflow to restart animation
+    card.classList.add('flash');
+  });
+
+  document.getElementById('active-process-label').textContent = p.label;
+  document.getElementById('polarity-type').textContent = p.polarity;
+  document.getElementById('polarity-gas').textContent = p.gas;
+  document.getElementById('pol-label-1').textContent = p.polLabel1;
+  document.getElementById('pol-wire').textContent = p.polWire;
+  document.getElementById('pol-ground').textContent = p.polGround;
+
+  const v = currentVoltage;
+  const duty = p.duty[v];
+  document.getElementById('duty-voltage-label').textContent = `MAX RATED @ ${v}`;
+  document.getElementById('duty-amps').textContent = duty.amps;
+  document.getElementById('duty-pct').textContent = duty.pct;
+  document.getElementById('duty-sub').textContent = duty.sub;
+
+  const tbody = document.getElementById('amp-table-body');
+  const a120 = p.amps['120V'];
+  const a240 = p.amps['240V'];
+  tbody.innerHTML = `
+    <tr><td>120V</td><td>${a120.range}</td><td>${a120.cont}</td></tr>
+    <tr><td>240V</td><td>${a240.range}</td><td>${a240.cont}</td></tr>
+  `;
+}
+
+// Store artifact code separately to avoid HTML escaping corruption
+let artifactCounter = 0;
+const artifactStore = {};
+
+function md(text) {
+  // Extract HTML code blocks BEFORE any processing
+  const artifacts = [];
+  text = text.replace(/```html\n([\s\S]*?)```/g, (match, code) => {
+    const id = `__ARTIFACT_${artifacts.length}__`;
+    artifacts.push(code.trim());
+    return id;
+  });
+
+  // Also catch ```HTML (uppercase)
+  text = text.replace(/```HTML\n([\s\S]*?)```/g, (match, code) => {
+    const id = `__ARTIFACT_${artifacts.length}__`;
+    artifacts.push(code.trim());
+    return id;
+  });
+
+  let html = text
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" style="max-width:100%;border-radius:6px;margin:8px 0;border:1px solid var(--border);cursor:pointer;" onclick="window.open(this.src)">')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/`(.+?)`/g, '<code>$1</code>')
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^&gt; (.+)$/gm, '<blockquote>$1</blockquote>')
+    .replace(/^---$/gm, '<hr>');
+
+  html = html.replace(/(\|.+\|[\r\n]+\|[-| :]+\|[\r\n]+((\|.+\|[\r\n]*)+))/g, (match) => {
+    const rows = match.trim().split('\n').filter(r => r.trim());
+    if (rows.length < 2) return match;
+    const headers = rows[0].split('|').filter(c => c.trim()).map(c => c.trim());
+    const dataRows = rows.slice(2);
+    let table = '<table><thead><tr>' + headers.map(h => `<th>${h}</th>`).join('') + '</tr></thead><tbody>';
+    for (const row of dataRows) {
+      const cells = row.split('|').filter(c => c.trim()).map(c => c.trim());
+      table += '<tr>' + cells.map(c => `<td>${c}</td>`).join('') + '</tr>';
+    }
+    return table + '</tbody></table>';
+  });
+
+  html = html.replace(/^(\d+)\. (.+)$/gm, '<li>$2</li>');
+  html = html.replace(/(<li>.*<\/li>\n?)+/g, '<ol>$&</ol>');
+  html = html.replace(/^- (.+)$/gm, '<li>$1</li>');
+  html = html.replace(/(<li>.*<\/li>\n?)+/g, (m) => m.includes('<ol>') ? m : '<ul>' + m + '</ul>');
+  html = html.replace(/\n\n/g, '</p><p>');
+  html = '<p>' + html + '</p>';
+  html = html.replace(/<p>\s*<(h[23]|ol|ul|table|blockquote|hr)/g, '<$1');
+  html = html.replace(/<\/(h[23]|ol|ul|table|blockquote)>\s*<\/p>/g, '</$1>');
+
+  // Replace artifact placeholders with iframe containers
+  // Store raw code in JS, not in the DOM
+  artifacts.forEach((code, i) => {
+    const aid = `artifact-${++artifactCounter}`;
+    artifactStore[aid] = code;
+    const container = `
+      <div class="artifact-container">
+        <div class="artifact-header">
+          <span class="artifact-badge">Interactive Diagram</span>
+          <button class="artifact-expand-btn" onclick="expandArtifact('${aid}')">Expand</button>
+        </div>
+        <iframe id="${aid}" class="artifact-iframe"></iframe>
+        <div class="artifact-error" id="${aid}-error"></div>
+      </div>`;
+    html = html.replace(`__ARTIFACT_${i}__`, container);
+  });
+
+  // Convert page citations [p.XX], [qsg.X], [chart.X] into clickable links
+  // Page ranges: [p.42-43] -> two clickable links
+  html = html.replace(/\[p\.(\d+)-(\d+)\]/g, (match, from, to) =>
+    `<a class="page-cite" onclick="openPageCitation('owner-manual', ${from})" title="View manual page ${from}">p.${from}</a>` +
+    `<a class="page-cite" onclick="openPageCitation('owner-manual', ${to})" title="View manual page ${to}">p.${to}</a>`
+  );
+  // Single pages: [p.7]
+  html = html.replace(/\[p\.(\d+)\]/g, (match, num) =>
+    `<a class="page-cite" onclick="openPageCitation('owner-manual', ${num})" title="View manual page ${num}">p.${num}</a>`
+  );
+  // QSG ranges and singles
+  html = html.replace(/\[qsg\.(\d+)-(\d+)\]/g, (match, from, to) =>
+    `<a class="page-cite" onclick="openPageCitation('quick-start-guide', ${from})" title="View quick-start guide page ${from}">QSG p.${from}</a>` +
+    `<a class="page-cite" onclick="openPageCitation('quick-start-guide', ${to})" title="View quick-start guide page ${to}">QSG p.${to}</a>`
+  );
+  html = html.replace(/\[qsg\.(\d+)\]/g, (match, num) =>
+    `<a class="page-cite" onclick="openPageCitation('quick-start-guide', ${num})" title="View quick-start guide page ${num}">QSG p.${num}</a>`
+  );
+  // Chart
+  html = html.replace(/\[chart\.(\d+)\]/g, (match, num) =>
+    `<a class="page-cite" onclick="openPageCitation('selection-chart', ${num})" title="View selection chart">Chart</a>`
+  );
+
+  return html;
+}
+
+function initArtifacts(container) {
+  container.querySelectorAll('.artifact-iframe').forEach(iframe => {
+    const code = artifactStore[iframe.id];
+    if (!code) return;
+
+    // Wrap raw HTML in a base template if it doesn't have a full document structure
+    let fullHtml = code;
+    if (!code.toLowerCase().includes('<!doctype') && !code.toLowerCase().includes('<html')) {
+      fullHtml = `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:system-ui,-apple-system,sans-serif;background:#fff;color:#1a1a1a}</style>
+</head><body>${code}</body></html>`;
+    }
+
+    const blob = new Blob([fullHtml], { type: 'text/html; charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    iframe.src = url;
+
+    iframe.addEventListener('load', () => {
+      URL.revokeObjectURL(url);
+      try {
+        const doc = iframe.contentDocument || iframe.contentWindow.document;
+
+        // Listen for errors inside the iframe
+        iframe.contentWindow.addEventListener('error', (e) => {
+          const errDiv = document.getElementById(iframe.id + '-error');
+          if (errDiv) {
+            errDiv.style.display = 'block';
+            errDiv.textContent = 'Render error: ' + (e.message || 'Unknown error');
+          }
+        });
+
+        // Auto-resize to content
+        const resize = () => {
+          const h = doc.documentElement.scrollHeight || doc.body.scrollHeight;
+          iframe.style.height = Math.min(Math.max(h, 200), 700) + 'px';
+        };
+        setTimeout(resize, 50);
+        setTimeout(resize, 200);
+        setTimeout(resize, 500);
+        setTimeout(resize, 1500);
+
+        // Re-resize on window resize
+        new ResizeObserver(resize).observe(doc.body);
+      } catch (e) {
+        iframe.style.height = '400px';
+      }
+    });
+  });
+}
+
+let feedbackCounter = 0;
+
+function addMessage(sender, text, isAgent) {
+  const messages = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = 'msg';
+  const fid = `fb-${++feedbackCounter}`;
+  const feedbackHtml = isAgent && sender === 'PROX AI AGENT' ? `
+    <div class="msg-feedback" id="${fid}">
+      <span class="msg-feedback-label">Did this answer your question?</span>
+      <div class="msg-feedback-btns">
+        <button class="feedback-btn" onclick="submitFeedback('${fid}', 'up')" title="Yes"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg></button>
+        <button class="feedback-btn" onclick="submitFeedback('${fid}', 'down')" title="No"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"></path></svg></button>
+      </div>
+      <span class="msg-feedback-thanks">Thanks for the feedback</span>
+    </div>
+  ` : '';
+  div.innerHTML = `
+    <div class="msg-sender ${isAgent ? 'agent' : ''}">${sender}</div>
+    <div class="msg-body ${isAgent ? '' : 'user-msg'}">${isAgent ? md(text) : text}</div>
+    ${feedbackHtml}
+  `;
+  messages.appendChild(div);
+  if (isAgent) initArtifacts(div);
+  messages.scrollTop = messages.scrollHeight;
+  return div;
+}
+
+function submitFeedback(fid, vote) {
+  const container = document.getElementById(fid);
+  if (!container) return;
+  const btns = container.querySelectorAll('.feedback-btn');
+  btns.forEach(btn => {
+    btn.disabled = true;
+    btn.style.pointerEvents = 'none';
+  });
+  if (vote === 'up') {
+    btns[0].classList.add('selected-up');
+  } else {
+    btns[1].classList.add('selected-down');
+  }
+  container.querySelector('.msg-feedback-thanks').style.display = 'inline';
+  container.querySelector('.msg-feedback-label').style.display = 'none';
+
+  // Send to backend
+  fetch('/api/feedback', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      vote: vote,
+      session_id: sessionId,
+      feedback_id: fid,
+      timestamp: new Date().toISOString(),
+    }),
+  }).catch(() => {});
+}
+
+function createStreamingMessage() {
+  const messages = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = 'msg';
+  div.innerHTML = `
+    <div class="msg-sender agent">PROX AI AGENT</div>
+    <div class="msg-body streaming-body"></div>
+  `;
+  messages.appendChild(div);
+  return div;
+}
+
+function updateStreamingMessage(div, rawText) {
+  const body = div.querySelector('.msg-body');
+  // Simple render during streaming: escape HTML, convert bold and newlines
+  let html = rawText
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" style="max-width:100%;border-radius:6px;margin:8px 0;border:1px solid var(--border);">')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\n\n/g, '<br><br>')
+    .replace(/\n/g, '<br>');
+  body.innerHTML = html;
+  const messages = document.getElementById('chat-messages');
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function finalizeStreamingMessage(div, fullText) {
+  const body = div.querySelector('.msg-body');
+  body.classList.remove('streaming-body');
+  body.innerHTML = md(fullText);
+  initArtifacts(div);
+
+  // Speak response if triggered by voice input
+  if (wasVoiceInput) {
+    wasVoiceInput = false;
+    speakResponse(fullText);
+  }
+
+  // Add feedback widget after streaming completes
+  const fid = `fb-${++feedbackCounter}`;
+  const fbDiv = document.createElement('div');
+  fbDiv.className = 'msg-feedback';
+  fbDiv.id = fid;
+  fbDiv.innerHTML = `
+    <span class="msg-feedback-label">Did this answer your question?</span>
+    <div class="msg-feedback-btns">
+      <button class="feedback-btn" onclick="submitFeedback('${fid}', 'up')" title="Yes"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg></button>
+      <button class="feedback-btn" onclick="submitFeedback('${fid}', 'down')" title="No"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"></path></svg></button>
+    </div>
+    <span class="msg-feedback-thanks">Thanks for the feedback</span>
+  `;
+  div.appendChild(fbDiv);
+
+  const messages = document.getElementById('chat-messages');
+  messages.scrollTop = messages.scrollHeight;
+}
+
+async function sendMessage() {
+  const input = document.getElementById('chat-input');
+  const msg = input.value.trim();
+  if (!msg || isSending) return;
+
+  isSending = true;
+  input.value = '';
+  document.getElementById('send-btn').disabled = true;
+  addMessage('OPERATOR', msg, false);
+
+  const indicator = document.getElementById('typing-indicator');
+  indicator.classList.add('visible');
+
+  let streamDiv = null;
+  let agentText = '';
+
+  try {
+    const resp = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: msg, process: currentProcess, voltage: currentVoltage, session_id: sessionId }),
+    });
+
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop();
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        try {
+          const data = JSON.parse(line.slice(6));
+          if (data.type === 'delta') {
+            // Token-by-token streaming
+            if (!streamDiv) {
+              indicator.classList.remove('visible');
+              streamDiv = createStreamingMessage();
+            }
+            agentText += data.content;
+            updateStreamingMessage(streamDiv, agentText);
+          } else if (data.type === 'text') {
+            // Full text block (fallback / final)
+            if (!streamDiv) {
+              indicator.classList.remove('visible');
+              streamDiv = createStreamingMessage();
+            }
+            agentText += (agentText ? '\n\n' : '') + data.content;
+            updateStreamingMessage(streamDiv, agentText);
+          } else if (data.type === 'error') {
+            agentText += '\n\n**Error:** ' + data.content;
+            if (streamDiv) updateStreamingMessage(streamDiv, agentText);
+          }
+        } catch (_) {}
+      }
+    }
+
+    indicator.classList.remove('visible');
+
+    // Final render: full markdown + artifacts
+    if (streamDiv && agentText) {
+      finalizeStreamingMessage(streamDiv, agentText);
+    } else if (!streamDiv && agentText) {
+      addMessage('PROX AI AGENT', agentText, true);
+    }
+  } catch (err) {
+    indicator.classList.remove('visible');
+    addMessage('SYSTEM', 'Connection error: ' + err.message, true);
+  }
+
+  isSending = false;
+  document.getElementById('send-btn').disabled = false;
+  input.focus();
+}
+
+const processSuggestions = {
+  MIG: [
+    'What wire size for MIG?',
+    'Show polarity diagram',
+    'Duty cycle at max amps',
+    'Wire feed tension settings',
+    'Gas flow rate for MIG',
+  ],
+  'Flux-Cored': [
+    'Polarity setup for flux-core',
+    'Feed roller config for flux-core',
+    'Troubleshoot porosity',
+    'What voltage range?',
+  ],
+  TIG: [
+    'TIG torch and pedal setup',
+    'Electrode grinding angle',
+    'Gas flow rate for TIG',
+    'TIG duty cycle chart',
+  ],
+  Stick: [
+    'Electrode holder setup',
+    'Which electrodes can I use?',
+    'Stick duty cycle at max amps',
+    'Polarity diagram for stick',
+  ],
+};
+
+function updateSuggestions() {
+  const container = document.getElementById('suggestions');
+  const chips = processSuggestions[currentProcess] || processSuggestions.MIG;
+  container.innerHTML = chips.map(q =>
+    `<button class="suggestion-chip" onclick="askSuggestion(this)">${q}</button>`
+  ).join('');
+}
+
+function askSuggestion(el) {
+  if (isSending) return;
+  document.getElementById('chat-input').value = el.textContent;
+  sendMessage();
+}
+
+function resetChat() {
+  fetch('/api/chat/reset', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ session_id: sessionId }),
+  });
+  sessionId = crypto.randomUUID();
+  sessionStorage.setItem('prox-session', sessionId);
+  const messages = document.getElementById('chat-messages');
+  messages.innerHTML = `
+    <div class="msg">
+      <div class="msg-sender agent">PROX AI AGENT</div>
+      <div class="msg-body">
+        <p>New session started. Vulcan OmniPro 220 support agent online.</p>
+        <p>Describe your issue or ask about setup, specs, troubleshooting, or maintenance.</p>
+      </div>
+    </div>`;
+}
+
+function runWizard() {
+  const material = document.getElementById('wizard-material').value;
+  const thickness = document.getElementById('wizard-thickness').value;
+  if (!material || !thickness) return;
+  const msg = `I need complete setup recommendations for welding ${material} at ${thickness} thickness on ${currentVoltage}. What process should I use? Give me all settings: polarity/cable setup, wire type and size, amperage and voltage ranges, gas requirements, feed roller configuration, and contact tip size. Include a visual settings diagram.`;
+  document.getElementById('chat-input').value = msg;
+  sendMessage();
+}
+
+// Thickness options filtered by material capability
+// Based on selection chart: MIG 22ga-3/8", Flux 18ga-5/16", Stick 10ga-1/2", TIG 24ga-3/16"
+const thicknessData = {
+  'Mild Steel': [
+    // All processes available -- show full range from TIG thin to Stick thick
+    { value: '24 gauge (0.024 in)', label: '24 ga / 0.024" (TIG only)' },
+    { value: '22 gauge (0.030 in)', label: '22 ga / 0.030"' },
+    { value: '20 gauge (0.036 in)', label: '20 ga / 0.036"' },
+    { value: '18 gauge (0.048 in)', label: '18 ga / 0.048"' },
+    { value: '16 gauge (0.060 in)', label: '16 ga / 0.060"' },
+    { value: '14 gauge (0.075 in)', label: '14 ga / 0.075"' },
+    { value: '1/8 inch (0.125 in)', label: '1/8" / 0.125"' },
+    { value: '3/16 inch (0.1875 in)', label: '3/16" / 0.1875"' },
+    { value: '1/4 inch (0.250 in)', label: '1/4" / 0.250"' },
+    { value: '5/16 inch (0.3125 in)', label: '5/16" / 0.3125"' },
+    { value: '3/8 inch (0.375 in)', label: '3/8" / 0.375"' },
+    { value: '1/2 inch (0.500 in)', label: '1/2" / 0.500" (Stick only)' },
+  ],
+  'Stainless Steel': [
+    // MIG, TIG, Stick -- same range as mild steel
+    { value: '24 gauge (0.024 in)', label: '24 ga / 0.024" (TIG only)' },
+    { value: '22 gauge (0.030 in)', label: '22 ga / 0.030"' },
+    { value: '20 gauge (0.036 in)', label: '20 ga / 0.036"' },
+    { value: '18 gauge (0.048 in)', label: '18 ga / 0.048"' },
+    { value: '16 gauge (0.060 in)', label: '16 ga / 0.060"' },
+    { value: '14 gauge (0.075 in)', label: '14 ga / 0.075"' },
+    { value: '1/8 inch (0.125 in)', label: '1/8" / 0.125"' },
+    { value: '3/16 inch (0.1875 in)', label: '3/16" / 0.1875"' },
+    { value: '1/4 inch (0.250 in)', label: '1/4" / 0.250"' },
+    { value: '3/8 inch (0.375 in)', label: '3/8" / 0.375"' },
+  ],
+  'Aluminum (Spool Gun)': [
+    // MIG with spool gun only -- 22ga to 3/8"
+    // Note: AC TIG for aluminum is NOT supported on this welder
+    { value: '22 gauge (0.030 in)', label: '22 ga / 0.030"' },
+    { value: '20 gauge (0.036 in)', label: '20 ga / 0.036"' },
+    { value: '18 gauge (0.048 in)', label: '18 ga / 0.048"' },
+    { value: '16 gauge (0.060 in)', label: '16 ga / 0.060"' },
+    { value: '14 gauge (0.075 in)', label: '14 ga / 0.075"' },
+    { value: '1/8 inch (0.125 in)', label: '1/8" / 0.125"' },
+    { value: '3/16 inch (0.1875 in)', label: '3/16" / 0.1875"' },
+    { value: '1/4 inch (0.250 in)', label: '1/4" / 0.250"' },
+    { value: '3/8 inch (0.375 in)', label: '3/8" / 0.375"' },
+  ],
+  'Chrome Moly': [
+    // TIG only -- 24ga to 3/16"
+    { value: '24 gauge (0.024 in)', label: '24 ga / 0.024"' },
+    { value: '22 gauge (0.030 in)', label: '22 ga / 0.030"' },
+    { value: '20 gauge (0.036 in)', label: '20 ga / 0.036"' },
+    { value: '18 gauge (0.048 in)', label: '18 ga / 0.048"' },
+    { value: '16 gauge (0.060 in)', label: '16 ga / 0.060"' },
+    { value: '14 gauge (0.075 in)', label: '14 ga / 0.075"' },
+    { value: '1/8 inch (0.125 in)', label: '1/8" / 0.125"' },
+    { value: '3/16 inch (0.1875 in)', label: '3/16" / 0.1875"' },
+  ],
+};
+
+function updateThicknessOptions() {
+  const material = document.getElementById('wizard-material').value;
+  const sel = document.getElementById('wizard-thickness');
+  if (!material) {
+    sel.innerHTML = '<option value="">Select material first</option>';
+    sel.disabled = true;
+    return;
+  }
+  sel.disabled = false;
+  sel.innerHTML = '<option value="">Select thickness...</option>';
+  const options = thicknessData[material] || [];
+  for (const opt of options) {
+    const o = document.createElement('option');
+    o.value = opt.value;
+    o.textContent = opt.label;
+    sel.appendChild(o);
+  }
+}
+
+updateRightPanel();
+updateSuggestions();
+updateThicknessOptions();
+
+// ---------------------------------------------------------------------------
+// Voice Mode (Web Speech API)
+// ---------------------------------------------------------------------------
+
+let recognition = null;
+let isListening = false;
+
+function initVoice() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    document.getElementById('voice-btn').classList.add('voice-unsupported');
+    return;
+  }
+
+  recognition = new SpeechRecognition();
+  recognition.continuous = false;
+  recognition.interimResults = true;
+  recognition.lang = 'en-US';
+
+  recognition.onresult = (event) => {
+    const input = document.getElementById('chat-input');
+    let transcript = '';
+    for (let i = 0; i < event.results.length; i++) {
+      transcript += event.results[i][0].transcript;
+    }
+    input.value = transcript;
+
+    // Auto-send when speech is final
+    if (event.results[event.results.length - 1].isFinal) {
+      stopVoice();
+      if (transcript.trim()) {
+        wasVoiceInput = true;
+        sendMessage();
+      }
+    }
+  };
+
+  recognition.onerror = (event) => {
+    if (event.error !== 'no-speech') {
+      console.warn('Speech recognition error:', event.error);
+    }
+    stopVoice();
+  };
+
+  recognition.onend = () => {
+    stopVoice();
+  };
+}
+
+function toggleVoice() {
+  if (isListening) {
+    stopVoice();
+  } else {
+    startVoice();
+  }
+}
+
+function startVoice() {
+  if (!recognition) return;
+  const btn = document.getElementById('voice-btn');
+  const input = document.getElementById('chat-input');
+  btn.classList.add('listening');
+  input.placeholder = 'LISTENING...';
+  input.value = '';
+  isListening = true;
+  try {
+    recognition.start();
+  } catch (e) {
+    stopVoice();
+  }
+}
+
+function stopVoice() {
+  if (!recognition) return;
+  const btn = document.getElementById('voice-btn');
+  const input = document.getElementById('chat-input');
+  btn.classList.remove('listening');
+  input.placeholder = 'DESCRIBE ISSUE OR ASK FOR SPECIFICATIONS...';
+  isListening = false;
+  try {
+    recognition.stop();
+  } catch (e) {}
+}
+
+// Text-to-speech for agent responses
+function speakResponse(text) {
+  if (!('speechSynthesis' in window)) return;
+  // Strip markdown formatting for cleaner speech
+  const clean = text
+    .replace(/\*\*(.+?)\*\*/g, '$1')
+    .replace(/`(.+?)`/g, '$1')
+    .replace(/^#{1,3}\s+/gm, '')
+    .replace(/\[p\.\d+\]/g, '')
+    .replace(/\[qsg\.\d+\]/g, '')
+    .replace(/\[chart\.\d+\]/g, '')
+    .replace(/```html[\s\S]*?```/g, 'See the interactive diagram below.')
+    .replace(/\|.*\|/g, '')
+    .replace(/---/g, '')
+    .trim();
+
+  // Only speak if reasonably short
+  if (clean.length > 1000) return;
+
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(clean);
+  utterance.rate = 1.05;
+  utterance.pitch = 1.0;
+  window.speechSynthesis.speak(utterance);
+}
+
+initVoice();
+</script>
+
+<!-- Fullscreen artifact overlay -->
+<div class="artifact-overlay" id="artifact-overlay" onclick="closeArtifactOverlay(event)">
+  <div class="artifact-overlay-inner" onclick="event.stopPropagation()">
+    <div class="artifact-overlay-header">
+      <span style="font-size:10px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;font-weight:600;">Interactive Diagram</span>
+      <button class="artifact-overlay-close" onclick="closeArtifactOverlay()">Close</button>
+    </div>
+    <iframe id="artifact-overlay-frame"></iframe>
+  </div>
+</div>
+
+<script>
+function openPageCitation(doc, pageNum) {
+  const padded = String(pageNum).padStart(3, '0');
+  const filename = `${doc}_p${padded}.png`;
+  const imgUrl = `/pages/${filename}`;
+
+  const overlay = document.getElementById('artifact-overlay');
+  const frame = document.getElementById('artifact-overlay-frame');
+
+  // Update the overlay header to show the page reference
+  const headerLabel = overlay.querySelector('.artifact-overlay-header span');
+  const docLabel = doc === 'owner-manual' ? 'Owner Manual'
+    : doc === 'quick-start-guide' ? 'Quick Start Guide'
+    : 'Selection Chart';
+  headerLabel.textContent = `${docLabel} -- Page ${pageNum}`;
+
+  // Load a simple viewer page that fits the image inside the iframe
+  const absUrl = new URL(imgUrl, window.location.origin).href;
+  const viewerHtml = `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#f0f0f0;display:flex;align-items:center;justify-content:center;height:100vh;overflow:hidden;padding:16px}
+img{max-width:100%;max-height:100%;object-fit:contain;box-shadow:0 2px 12px rgba(0,0,0,0.15);background:#fff}
+</style></head><body>
+<img src="${absUrl}" alt="Page ${pageNum}" />
+</body></html>`;
+  const blob = new Blob([viewerHtml], {type:'text/html;charset=utf-8'});
+  frame.src = URL.createObjectURL(blob);
+  overlay.classList.add('visible');
+}
+
+function expandArtifact(artifactId) {
+  const code = artifactStore[artifactId];
+  if (!code) return;
+  const overlay = document.getElementById('artifact-overlay');
+  const frame = document.getElementById('artifact-overlay-frame');
+  const blob = new Blob([code], { type: 'text/html; charset=utf-8' });
+  frame.src = URL.createObjectURL(blob);
+  overlay.classList.add('visible');
+}
+
+function closeArtifactOverlay(e) {
+  if (e && e.target !== document.getElementById('artifact-overlay')) return;
+  const overlay = document.getElementById('artifact-overlay');
+  const frame = document.getElementById('artifact-overlay-frame');
+  overlay.classList.remove('visible');
+  URL.revokeObjectURL(frame.src);
+  frame.src = 'about:blank';
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeArtifactOverlay();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+{
+  "owner-manual.pdf": {
+    "total_pages": 48,
+    "files": [
+      "owner-manual_p001.png",
+      "owner-manual_p002.png",
+      "owner-manual_p003.png",
+      "owner-manual_p004.png",
+      "owner-manual_p005.png",
+      "owner-manual_p006.png",
+      "owner-manual_p007.png",
+      "owner-manual_p008.png",
+      "owner-manual_p009.png",
+      "owner-manual_p010.png",
+      "owner-manual_p011.png",
+      "owner-manual_p012.png",
+      "owner-manual_p013.png",
+      "owner-manual_p014.png",
+      "owner-manual_p015.png",
+      "owner-manual_p016.png",
+      "owner-manual_p017.png",
+      "owner-manual_p018.png",
+      "owner-manual_p019.png",
+      "owner-manual_p020.png",
+      "owner-manual_p021.png",
+      "owner-manual_p022.png",
+      "owner-manual_p023.png",
+      "owner-manual_p024.png",
+      "owner-manual_p025.png",
+      "owner-manual_p026.png",
+      "owner-manual_p027.png",
+      "owner-manual_p028.png",
+      "owner-manual_p029.png",
+      "owner-manual_p030.png",
+      "owner-manual_p031.png",
+      "owner-manual_p032.png",
+      "owner-manual_p033.png",
+      "owner-manual_p034.png",
+      "owner-manual_p035.png",
+      "owner-manual_p036.png",
+      "owner-manual_p037.png",
+      "owner-manual_p038.png",
+      "owner-manual_p039.png",
+      "owner-manual_p040.png",
+      "owner-manual_p041.png",
+      "owner-manual_p042.png",
+      "owner-manual_p043.png",
+      "owner-manual_p044.png",
+      "owner-manual_p045.png",
+      "owner-manual_p046.png",
+      "owner-manual_p047.png",
+      "owner-manual_p048.png"
+    ]
+  },
+  "quick-start-guide.pdf": {
+    "total_pages": 2,
+    "files": [
+      "quick-start-guide_p001.png",
+      "quick-start-guide_p002.png"
+    ]
+  },
+  "selection-chart.pdf": {
+    "total_pages": 1,
+    "files": [
+      "selection-chart_p001.png"
+    ]
+  }
+}

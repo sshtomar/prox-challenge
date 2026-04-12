@@ -1,0 +1,447 @@
+{
+  "owner-manual.pdf": {
+    "pages": [
+      {
+        "page": 1,
+        "file": "owner-manual_p001.png",
+        "section": "cover",
+        "content_type": ["text", "photo"],
+        "topics": ["product identification", "item number 57812"],
+        "visual_content": "Product photo of Vulcan OmniPro 220"
+      },
+      {
+        "page": 2,
+        "file": "owner-manual_p002.png",
+        "section": "safety",
+        "content_type": ["text", "table"],
+        "topics": ["table of contents", "warning symbols", "general safety"],
+        "visual_content": "Warning symbol definitions table"
+      },
+      {
+        "page": 3,
+        "file": "owner-manual_p003.png",
+        "section": "safety",
+        "content_type": ["text"],
+        "topics": ["fume safety", "gas safety", "arc ray safety", "PPE requirements"],
+        "visual_content": "Safety icons for fumes and arc rays"
+      },
+      {
+        "page": 4,
+        "file": "owner-manual_p004.png",
+        "section": "safety",
+        "content_type": ["text"],
+        "topics": ["electrical safety", "fire safety"],
+        "visual_content": "Electrical and fire hazard icons"
+      },
+      {
+        "page": 5,
+        "file": "owner-manual_p005.png",
+        "section": "safety",
+        "content_type": ["text"],
+        "topics": ["welder use and care", "maintenance", "cylinder safety"],
+        "visual_content": null
+      },
+      {
+        "page": 6,
+        "file": "owner-manual_p006.png",
+        "section": "safety",
+        "content_type": ["text"],
+        "topics": ["California Prop 65 warning"],
+        "visual_content": null
+      },
+      {
+        "page": 7,
+        "file": "owner-manual_p007.png",
+        "section": "specifications",
+        "content_type": ["table"],
+        "topics": ["MIG specs", "TIG specs", "Stick specs", "duty cycles", "amperage ranges", "wire capacity", "wire speed"],
+        "visual_content": "Three specification tables (MIG, TIG, Stick)",
+        "critical_data": true
+      },
+      {
+        "page": 8,
+        "file": "owner-manual_p008.png",
+        "section": "controls",
+        "content_type": ["diagram"],
+        "topics": ["front panel controls", "LCD display", "control knob", "home button", "back button", "positive socket", "negative socket", "wire feed power cable", "MIG gun socket", "spool gun gas outlet"],
+        "visual_content": "Labeled front panel diagram with callout arrows",
+        "critical_data": true
+      },
+      {
+        "page": 9,
+        "file": "owner-manual_p009.png",
+        "section": "controls",
+        "content_type": ["diagram"],
+        "topics": ["interior controls", "wire feed mechanism", "feed tensioner", "idler arm", "wire spool", "spool knob", "foot pedal socket", "wire feed control socket", "cold wire feed switch"],
+        "visual_content": "Labeled interior controls diagram",
+        "critical_data": true
+      },
+      {
+        "page": 10,
+        "file": "owner-manual_p010.png",
+        "section": "mig-flux-setup",
+        "content_type": ["text", "diagram"],
+        "topics": ["wire spool installation", "1-2 lb spool loading", "power switch location"],
+        "visual_content": "Wire spool installation diagrams with labeled parts"
+      },
+      {
+        "page": 11,
+        "file": "owner-manual_p011.png",
+        "section": "mig-flux-setup",
+        "content_type": ["text", "diagram"],
+        "topics": ["10-12 lb spool installation", "spool adapter", "feed tensioner adjustment"],
+        "visual_content": "Large spool loading diagram, tensioner diagram"
+      },
+      {
+        "page": 12,
+        "file": "owner-manual_p012.png",
+        "section": "mig-flux-setup",
+        "content_type": ["text", "diagram"],
+        "topics": ["feed roller instructions", "solid core V-groove", "flux-cored knurled groove", "wire diameter matching"],
+        "visual_content": "Feed roller orientation diagrams (A/B/C/D sides)",
+        "critical_data": true
+      },
+      {
+        "page": 13,
+        "file": "owner-manual_p013.png",
+        "section": "mig-flux-setup",
+        "content_type": ["text", "diagram"],
+        "topics": ["gun cable connector", "wire feed control cable", "DCEN polarity setup", "flux-cored gasless polarity"],
+        "visual_content": "DCEN polarity wiring diagram showing cable routing to sockets",
+        "critical_data": true
+      },
+      {
+        "page": 14,
+        "file": "owner-manual_p014.png",
+        "section": "mig-flux-setup",
+        "content_type": ["text", "diagram"],
+        "topics": ["DCEP polarity setup", "solid core gas shielded polarity", "shielding gas connection", "regulator installation", "gas cylinder setup"],
+        "visual_content": "DCEP polarity wiring diagram, gas cylinder connection sequence",
+        "critical_data": true
+      },
+      {
+        "page": 15,
+        "file": "owner-manual_p015.png",
+        "section": "mig-flux-setup",
+        "content_type": ["text", "diagram"],
+        "topics": ["wire threading", "feed guide", "wire inlet liner", "idler arm latching", "feed tensioner setting", "nozzle removal", "contact tip removal", "stainless steel wire note"],
+        "visual_content": "Wire threading diagrams, MIG gun nozzle/tip diagram"
+      },
+      {
+        "page": 16,
+        "file": "owner-manual_p016.png",
+        "section": "mig-flux-setup",
+        "content_type": ["text", "diagram"],
+        "topics": ["cold wire feed", "contact tip installation", "gas flow test"],
+        "visual_content": "Contact tip and nozzle assembly diagram"
+      },
+      {
+        "page": 17,
+        "file": "owner-manual_p017.png",
+        "section": "mig-flux-setup",
+        "content_type": ["text", "diagram"],
+        "topics": ["MIG welding LCD screens", "process selection", "wire type selection", "wire diameter and gas settings", "weld settings screen"],
+        "visual_content": "LCD screen interface screenshots for MIG setup",
+        "critical_data": true
+      },
+      {
+        "page": 18,
+        "file": "owner-manual_p018.png",
+        "section": "mig-flux-setup",
+        "content_type": ["text", "diagram"],
+        "topics": ["flux-cored welding LCD screens", "synergic settings", "optional settings", "inductance", "burn back", "recall and save settings"],
+        "visual_content": "LCD screen interface screenshots for Flux-Cored setup"
+      },
+      {
+        "page": 19,
+        "file": "owner-manual_p019.png",
+        "section": "mig-flux-setup",
+        "content_type": ["text", "diagram"],
+        "topics": ["MIG welding technique", "gun angle", "travel direction", "push vs drag", "CTWD (contact tip to work distance)", "duty cycle charts for MIG"],
+        "visual_content": "MIG duty cycle clock diagrams, welding technique illustrations",
+        "critical_data": true
+      },
+      {
+        "page": 20,
+        "file": "owner-manual_p020.png",
+        "section": "mig-flux-setup",
+        "content_type": ["text", "diagram"],
+        "topics": ["setting up the weld", "workpiece preparation", "clamping", "chamfering", "ground clamp placement"],
+        "visual_content": "Workpiece preparation and clamping diagrams"
+      },
+      {
+        "page": 21,
+        "file": "owner-manual_p021.png",
+        "section": "mig-flux-setup",
+        "content_type": ["text", "diagram"],
+        "topics": ["MIG welding technique continued", "bead patterns", "weave patterns"],
+        "visual_content": "Welding bead pattern diagrams"
+      },
+      {
+        "page": 22,
+        "file": "owner-manual_p022.png",
+        "section": "mig-flux-setup",
+        "content_type": ["text", "diagram"],
+        "topics": ["joint types", "butt joint", "lap joint", "T-joint", "outside corner joint", "welding positions"],
+        "visual_content": "Joint type diagrams with cross-sections"
+      },
+      {
+        "page": 23,
+        "file": "owner-manual_p023.png",
+        "section": "mig-flux-setup",
+        "content_type": ["text"],
+        "topics": ["post-welding procedures", "safety after welding"],
+        "visual_content": null
+      },
+      {
+        "page": 24,
+        "file": "owner-manual_p024.png",
+        "section": "tig-stick-setup",
+        "content_type": ["text", "diagram"],
+        "topics": ["TIG cable setup", "TIG torch connection", "ground clamp to positive socket", "TIG torch to negative socket", "foot pedal connection", "shielding gas hose"],
+        "visual_content": "TIG cable routing diagram showing all connections",
+        "critical_data": true
+      },
+      {
+        "page": 25,
+        "file": "owner-manual_p025.png",
+        "section": "tig-stick-setup",
+        "content_type": ["text", "diagram"],
+        "topics": ["TIG shielding gas connection", "argon cylinder setup", "regulator installation", "power cord connection"],
+        "visual_content": "Gas cylinder and regulator connection sequence, power input diagram"
+      },
+      {
+        "page": 26,
+        "file": "owner-manual_p026.png",
+        "section": "tig-stick-setup",
+        "content_type": ["text", "diagram"],
+        "topics": ["tungsten electrode sharpening", "grinding technique", "TIG torch assembly", "collet body", "ceramic nozzle", "back cap", "electrode protrusion"],
+        "visual_content": "Electrode grinding diagram, TIG torch exploded assembly diagram",
+        "critical_data": true
+      },
+      {
+        "page": 27,
+        "file": "owner-manual_p027.png",
+        "section": "tig-stick-setup",
+        "content_type": ["text", "diagram"],
+        "topics": ["stick cable setup", "electrode holder to positive socket", "ground clamp to negative socket", "power cord connection"],
+        "visual_content": "Stick cable routing diagram",
+        "critical_data": true
+      },
+      {
+        "page": 28,
+        "file": "owner-manual_p028.png",
+        "section": "tig-stick-setup",
+        "content_type": ["text", "diagram"],
+        "topics": ["basic TIG and stick welding", "DC TIG for steel", "AC TIG for aluminum", "stick welding basics", "PPE requirements"],
+        "visual_content": "PPE requirement icons, power on illustration"
+      },
+      {
+        "page": 29,
+        "file": "owner-manual_p029.png",
+        "section": "tig-stick-setup",
+        "content_type": ["text", "diagram"],
+        "topics": ["TIG and stick duty cycles", "workpiece preparation", "chamfering", "ground clamp placement", "vehicle welding notice"],
+        "visual_content": "TIG and Stick duty cycle clock diagrams, workpiece setup diagram",
+        "critical_data": true
+      },
+      {
+        "page": 30,
+        "file": "owner-manual_p030.png",
+        "section": "tig-stick-setup",
+        "content_type": ["text", "diagram"],
+        "topics": ["TIG welding procedure", "LCD screen setup for TIG", "polarity and gas settings", "rod diameter", "material thickness", "auto weld settings", "amperage adjustment"],
+        "visual_content": "TIG LCD screen interface screenshots (polarity, settings, weld screen)",
+        "critical_data": true
+      },
+      {
+        "page": 31,
+        "file": "owner-manual_p031.png",
+        "section": "tig-stick-setup",
+        "content_type": ["text", "diagram"],
+        "topics": ["TIG welding technique", "optional settings", "recall and save settings", "torch holding", "foot pedal usage", "arc initiation", "weld puddle control", "post-weld procedures"],
+        "visual_content": "Recall/Save setting LCD screenshots"
+      },
+      {
+        "page": 32,
+        "file": "owner-manual_p032.png",
+        "section": "tig-stick-setup",
+        "content_type": ["text", "diagram"],
+        "topics": ["stick welding procedure", "LCD screen setup for stick", "electrode type selection", "polarity setting", "electrode diameter", "material thickness", "auto weld settings", "hot start", "arc force"],
+        "visual_content": "Stick LCD screen interface screenshots (electrode, polarity, settings)",
+        "critical_data": true
+      },
+      {
+        "page": 33,
+        "file": "owner-manual_p033.png",
+        "section": "tig-stick-setup",
+        "content_type": ["text", "diagram"],
+        "topics": ["stick welding technique", "hot start adjustment", "arc force adjustment", "arc ignition methods", "electrode angle", "optional settings", "post-weld procedures"],
+        "visual_content": "Hot Start and Arc Force LCD screenshots, arc striking illustration"
+      },
+      {
+        "page": 34,
+        "file": "owner-manual_p034.png",
+        "section": "welding-tips",
+        "content_type": ["text", "diagram"],
+        "topics": ["strike test procedure", "good weld vs poor weld", "cleaning the weld", "chipping hammer", "wire brush"],
+        "visual_content": "Strike test diagrams (good weld bends, poor weld snaps), cleaning tools illustration",
+        "critical_data": true
+      },
+      {
+        "page": 35,
+        "file": "owner-manual_p035.png",
+        "section": "welding-tips",
+        "content_type": ["diagram", "photo"],
+        "topics": ["wire weld diagnosis", "heat control", "weld penetration", "inadequate penetration", "proper penetration", "excess penetration", "burn-through", "example wire weld diagrams", "good weld", "voltage too low", "voltage too high", "travel speed too fast", "travel speed too slow", "CTWD too long", "wrong polarity"],
+        "visual_content": "Weld cross-section diagrams showing penetration levels, 6 example weld bead photos with diagnosis labels",
+        "critical_data": true
+      },
+      {
+        "page": 36,
+        "file": "owner-manual_p036.png",
+        "section": "welding-tips",
+        "content_type": ["text", "diagram"],
+        "topics": ["TIG weld diagnosis", "stick weld diagnosis"],
+        "visual_content": "TIG and stick weld diagnosis photos/diagrams"
+      },
+      {
+        "page": 37,
+        "file": "owner-manual_p037.png",
+        "section": "welding-tips",
+        "content_type": ["text"],
+        "topics": ["welding positions", "flat", "horizontal", "vertical", "overhead"],
+        "visual_content": "Welding position illustrations"
+      },
+      {
+        "page": 38,
+        "file": "owner-manual_p038.png",
+        "section": "welding-tips",
+        "content_type": ["text", "diagram"],
+        "topics": ["joint types detailed", "butt", "lap", "T-joint", "corner"],
+        "visual_content": "Joint type cross-section diagrams"
+      },
+      {
+        "page": 39,
+        "file": "owner-manual_p039.png",
+        "section": "welding-tips",
+        "content_type": ["text", "table"],
+        "topics": ["settings charts", "recommended settings"],
+        "visual_content": "Settings reference tables"
+      },
+      {
+        "page": 40,
+        "file": "owner-manual_p040.png",
+        "section": "welding-tips",
+        "content_type": ["text", "table"],
+        "topics": ["settings charts continued"],
+        "visual_content": "Settings reference tables continued"
+      },
+      {
+        "page": 41,
+        "file": "owner-manual_p041.png",
+        "section": "maintenance",
+        "content_type": ["text", "diagram"],
+        "topics": ["maintenance checklist", "nozzle cleaning", "contact tip inspection", "LCD screen cover replacement"],
+        "visual_content": "Nozzle/contact tip diagram, LCD screen cover replacement steps"
+      },
+      {
+        "page": 42,
+        "file": "owner-manual_p042.png",
+        "section": "troubleshooting",
+        "content_type": ["table"],
+        "topics": ["MIG troubleshooting", "flux-cored troubleshooting", "wire feed issues", "birds nest", "wire stops", "welding arc not stable", "weak arc"],
+        "visual_content": "Troubleshooting matrix table (Problem / Possible Causes / Likely Solutions)",
+        "critical_data": true
+      },
+      {
+        "page": 43,
+        "file": "owner-manual_p043.png",
+        "section": "troubleshooting",
+        "content_type": ["table"],
+        "topics": ["welder not functioning", "LCD not lighting", "arc does not ignite", "porosity in weld metal"],
+        "visual_content": "Troubleshooting matrix table continued",
+        "critical_data": true
+      },
+      {
+        "page": 44,
+        "file": "owner-manual_p044.png",
+        "section": "troubleshooting",
+        "content_type": ["table"],
+        "topics": ["TIG troubleshooting", "stick troubleshooting", "welder not functioning", "LCD not lighting", "weak arc", "arc not stable"],
+        "visual_content": "TIG/Stick troubleshooting matrix table",
+        "critical_data": true
+      },
+      {
+        "page": 45,
+        "file": "owner-manual_p045.png",
+        "section": "parts",
+        "content_type": ["diagram"],
+        "topics": ["wiring schematic", "PFC", "IGBT", "MCU board", "remote board", "LCD screen", "fan", "wire feeder", "solenoid valve"],
+        "visual_content": "Full electrical wiring schematic of the welder",
+        "critical_data": true
+      },
+      {
+        "page": 46,
+        "file": "owner-manual_p046.png",
+        "section": "parts",
+        "content_type": ["table"],
+        "topics": ["parts list", "part numbers", "quantities", "component names"],
+        "visual_content": "Parts list table (61 parts)"
+      },
+      {
+        "page": 47,
+        "file": "owner-manual_p047.png",
+        "section": "parts",
+        "content_type": ["diagram"],
+        "topics": ["assembly diagram", "exploded view", "part number callouts"],
+        "visual_content": "Exploded assembly diagram with numbered part callouts"
+      },
+      {
+        "page": 48,
+        "file": "owner-manual_p048.png",
+        "section": "warranty",
+        "content_type": ["text"],
+        "topics": ["90 day warranty", "warranty terms", "contact information"],
+        "visual_content": "Vulcan logo"
+      }
+    ]
+  },
+
+  "quick-start-guide.pdf": {
+    "pages": [
+      {
+        "page": 1,
+        "file": "quick-start-guide_p001.png",
+        "section": "quick-start",
+        "content_type": ["diagram"],
+        "topics": ["wire spool loading", "wire threading", "feed tension adjustment", "nozzle and tip setup", "cold wire feed", "power on sequence"],
+        "visual_content": "6-step visual quick start guide with numbered photo instructions",
+        "critical_data": true
+      },
+      {
+        "page": 2,
+        "file": "quick-start-guide_p002.png",
+        "section": "quick-start",
+        "content_type": ["diagram"],
+        "topics": ["stick cable setup", "MIG cable setup", "flux cable setup", "TIG cable setup", "cable routing for all 4 processes"],
+        "visual_content": "4 cable setup diagrams showing socket connections per process",
+        "critical_data": true
+      }
+    ]
+  },
+
+  "selection-chart.pdf": {
+    "pages": [
+      {
+        "page": 1,
+        "file": "selection-chart_p001.png",
+        "section": "process-selection",
+        "content_type": ["diagram", "table"],
+        "topics": ["how to choose a welder", "skill level", "shielding gas needed", "material type", "material thickness", "typical applications", "weld cleanliness", "flux-cored vs MIG vs stick vs TIG comparison", "duty cycle explanation", "MIG vs flux cored comparison"],
+        "visual_content": "Color-coded decision matrix comparing all 4 welding processes across 6 criteria",
+        "critical_data": true
+      }
+    ]
+  }
+}

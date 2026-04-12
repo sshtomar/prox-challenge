@@ -1,0 +1,7 @@
+.env
+.gstack/
+__pycache__/
+*.pyc
+.DS_Store
+node_modules/
+*.log

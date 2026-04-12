@@ -1,0 +1,6 @@
+claude-agent-sdk==0.1.58
+fastapi==0.135.3
+uvicorn==0.41.0
+rank-bm25==0.2.2
+logfire[fastapi]==4.13.2
+python-dotenv==1.0.0

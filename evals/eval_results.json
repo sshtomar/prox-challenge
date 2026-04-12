@@ -1,0 +1,214 @@
+[
+  {
+    "test_name": "TIG polarity diagram",
+    "passed": true,
+    "artifact_generated": true,
+    "structural": {
+      "parses": true,
+      "element_group_checks": {
+        "svg": true
+      },
+      "errors": [],
+      "elements_found": [
+        "body",
+        "circle",
+        "div",
+        "h2",
+        "head",
+        "html",
+        "line",
+        "meta",
+        "p",
+        "path",
+        "polygon",
+        "rect",
+        "span",
+        "strong",
+        "style",
+        "svg",
+        "text"
+      ]
+    },
+    "accuracy": {
+      "required_checks": {
+        "Positive": true,
+        "Negative": true,
+        "DCEN": true
+      },
+      "forbidden_recommendation_checks": {
+        "DCEP": true
+      },
+      "errors": []
+    },
+    "errors": []
+  },
+  {
+    "test_name": "MIG polarity diagram",
+    "passed": true,
+    "artifact_generated": true,
+    "structural": {
+      "parses": true,
+      "element_group_checks": {
+        "svg": true
+      },
+      "errors": [],
+      "elements_found": [
+        "body",
+        "br",
+        "circle",
+        "div",
+        "g",
+        "h2",
+        "head",
+        "html",
+        "line",
+        "meta",
+        "p",
+        "path",
+        "polygon",
+        "rect",
+        "span",
+        "strong",
+        "style",
+        "svg",
+        "text"
+      ]
+    },
+    "accuracy": {
+      "required_checks": {
+        "Positive": true,
+        "Negative": true,
+        "DCEP": true
+      },
+      "forbidden_recommendation_checks": {
+        "DCEN": true
+      },
+      "errors": []
+    },
+    "errors": []
+  },
+  {
+    "test_name": "Flux-Cored polarity (reversed from MIG)",
+    "passed": true,
+    "artifact_generated": true,
+    "structural": {
+      "parses": true,
+      "element_group_checks": {
+        "svg": true
+      },
+      "errors": [],
+      "elements_found": [
+        "body",
+        "circle",
+        "div",
+        "h2",
+        "head",
+        "html",
+        "line",
+        "meta",
+        "p",
+        "path",
+        "polygon",
+        "rect",
+        "strong",
+        "style",
+        "svg",
+        "text"
+      ]
+    },
+    "accuracy": {
+      "required_checks": {
+        "DCEN": true,
+        "Negative": true,
+        "Positive": true
+      },
+      "forbidden_recommendation_checks": {
+        "DCEP": true
+      },
+      "errors": []
+    },
+    "errors": []
+  },
+  {
+    "test_name": "Duty cycle calculator",
+    "passed": true,
+    "artifact_generated": true,
+    "structural": {
+      "parses": true,
+      "element_group_checks": {
+        "input | button | select": true
+      },
+      "errors": [],
+      "elements_found": [
+        "body",
+        "div",
+        "h1",
+        "h2",
+        "head",
+        "html",
+        "input",
+        "meta",
+        "p",
+        "script",
+        "span",
+        "style",
+        "table",
+        "tbody",
+        "td",
+        "th",
+        "thead",
+        "title",
+        "tr"
+      ]
+    },
+    "accuracy": {
+      "required_checks": {
+        "200": true,
+        "25": true,
+        "115": true
+      },
+      "forbidden_recommendation_checks": {},
+      "errors": []
+    },
+    "errors": []
+  },
+  {
+    "test_name": "Simple spec question (should NOT generate artifact)",
+    "passed": true,
+    "artifact_generated": false,
+    "structural": null,
+    "accuracy": null,
+    "errors": []
+  },
+  {
+    "test_name": "Settings configurator",
+    "passed": true,
+    "artifact_generated": true,
+    "structural": {
+      "parses": true,
+      "element_group_checks": {
+        "select | input | button": true
+      },
+      "errors": [],
+      "elements_found": [
+        "body",
+        "div",
+        "h1",
+        "head",
+        "html",
+        "input",
+        "label",
+        "meta",
+        "p",
+        "script",
+        "span",
+        "strong",
+        "style",
+        "title",
+        "ul"
+      ]
+    },
+    "accuracy": null,
+    "errors": []
+  }
+]
