@@ -6,9 +6,7 @@ Technical support agent for the Vulcan OmniPro 220 multiprocess welder. Built on
 
 ## Demo
 
-<video src="https://github.com/sshtomar/prox-challenge/raw/main/prox-challenge.mp4" controls width="100%"></video>
-
-[Watch the demo video](https://github.com/sshtomar/prox-challenge/raw/main/prox-challenge.mp4)
+[![Watch the demo](demo-thumbnail.jpg)](https://github.com/sshtomar/prox-challenge/raw/main/prox-challenge.mp4)
 
 ## Quick Start
 
