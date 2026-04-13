@@ -8,7 +8,7 @@ The Vulcan OmniPro 220 is an industrial multiprocess welder -- 4 welders in 1 ma
 
 ## Demo
 
-[![Watch the demo](docs/demo-thumbnail.jpg)](https://github.com/sshtomar/prox-challenge/raw/main/docs/prox-challenge.mp4)
+[![Watch the demo](docs/demo-thumbnail.jpg)](https://youtu.be/qqkVh2zbx54)
 
 ## Evaluation
 
