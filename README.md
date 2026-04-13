@@ -6,7 +6,7 @@ Technical support agent for the Vulcan OmniPro 220 multiprocess welder. Built on
 
 ## Demo
 
-[![Watch the demo](demo-thumbnail.jpg)](https://github.com/sshtomar/prox-challenge/raw/main/prox-challenge.mp4)
+[![Watch the demo](docs/demo-thumbnail.jpg)](https://github.com/sshtomar/prox-challenge/raw/main/docs/prox-challenge.mp4)
 
 ## Quick Start
 
@@ -111,32 +111,30 @@ Every request and tool call instrumented with Pydantic Logfire (OpenTelemetry sp
 Data sources: 20 Reddit cases from real users (r/Welding, r/harborfreight), 30 synthetic gap-fillers, 8 adversarial hallucination traps.
 
 ```bash
-python run_eval.py 10                    # run 10 random cases
-python run_eval.py --hallucination       # run hallucination suite
-python run_eval.py --faithfulness        # run with LLM-as-judge scoring
+python evals/run_eval.py 10                    # run 10 random cases
+python evals/run_eval.py --hallucination       # run hallucination suite
+python evals/run_eval.py --faithfulness        # run with LLM-as-judge scoring
 ```
 
 ## Project Structure
 
 ```
-server.py              FastAPI server + tools + system prompt
-agent.py               CLI agent for testing
-preprocess.py          PDF -> PNG + Markdown pipeline
-run_eval.py            Evaluation harness
-eval_dataset.json      58 test cases with tuples and expected tools
-knowledge_base/
-  specs.json           Structured specifications
-  troubleshooting.json Problem/cause/solution matrices
-  page_index.json      Page metadata and topic index
-  markdown/            Full manual markdown (Docling output)
-  pages/               300 DPI PNG page images
-  page_descriptions/   Text descriptions of visual pages
-static/
-  index.html           Frontend SPA
-railway.json           Railway deployment config
-requirements.txt       Python dependencies
+server.py                FastAPI server + tools + system prompt
+agent.py                 CLI agent for testing
+preprocess.py            PDF -> PNG + Markdown pipeline
+requirements.txt         Python dependencies
+railway.json             Railway deployment config
+Dockerfile               Container build
+knowledge_base/          Structured JSON, markdown, page images, descriptions
+static/index.html        Frontend SPA
+evals/
+  run_eval.py            Evaluation harness
+  eval_dataset.json      58 test cases with tuples and expected tools
+  eval_artifacts.py      Artifact generation for eval analysis
+docs/                    Design report PDF, demo video, product images
+files/                   Source PDFs (owner manual, quick-start guide, selection chart)
 ```
 
 ## Documentation
 
-Full design report with architecture decisions, prompt engineering details, eval methodology, and cost analysis: [Vulcan Omnipro 220 - Support Agent.pdf](Vulcan%20Omnipro%20220%20-%20Support%20Agent.pdf)
+Full design report with architecture decisions, prompt engineering details, eval methodology, and cost analysis: [Vulcan Omnipro 220 - Support Agent.pdf](docs/Vulcan%20Omnipro%20220%20-%20Support%20Agent.pdf)

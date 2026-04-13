@@ -27,6 +27,7 @@ from claude_agent_sdk import (
     query,
 )
 
+sys.path.insert(0, str(Path(__file__).parent.parent))
 from agent import SYSTEM_PROMPT, welding_server, BASE
 
 EVAL_PATH = Path(__file__).parent / "eval_dataset.json"
