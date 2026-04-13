@@ -1,92 +1,144 @@
-# Prox Founding Engineer Challenge
+# Vulcan OmniPro 220 Support Agent
 
-<img src="product.webp" alt="Vulcan OmniPro 220" width="400" /> <img src="product-inside.webp" alt="Vulcan OmniPro 220 — inside panel" width="400" />
+Technical support agent for the Vulcan OmniPro 220 multiprocess welder. Built on the Claude Agent SDK with a FastAPI backend and a three-panel chat interface.
 
-## The Product
+**Live:** https://prox-welding-agent-production.up.railway.app
 
-The [Vulcan OmniPro 220](https://www.harborfreight.com/omnipro-220-industrial-multiprocess-welder-with-120240v-input-57812.html) is a multiprocess welding system sold by Harbor Freight. It supports four welding processes (MIG, Flux-Cored, TIG, and Stick), runs on both 120V and 240V input, and has an LCD-based synergic control system.
+## Demo
 
-Its owner's manual is 48 pages of dense technical content. Duty cycle matrices across multiple voltages and amperages, polarity setup procedures that differ per welding process, wire feed mechanisms with specific tensioner calibrations, wiring schematics, troubleshooting matrices, weld diagnosis diagrams, and a full parts list.
+<video src="https://github.com/sshtomar/prox-challenge/raw/main/prox-challenge.mp4" controls width="100%"></video>
 
-This is exactly the kind of product Prox exists for. Nobody knows how to use this machine straight out of the box but has time to read 48 page manual, but a complicated machine needs expert-level support.
+[Watch the demo video](https://github.com/sshtomar/prox-challenge/raw/main/prox-challenge.mp4)
 
-Additional video: https://www.youtube.com/watch?v=kxGDoGcnhBw
-
-## Your Job
-
-Build a multimodal reasoning agent for the Vulcan OmniPro 220 using the Claude Agent SDK. The agent must be able to answer deep technical questions about this product accurately, helpfully, and not just in text.
-
-The manuals are in the `files/` directory.
-
-**There is no limit to how far you can go.** You can integrate voice. You can build a full interactive experience. Sky is the limit. The more ambitious and polished, the better.
-
-## What We're Testing
-
-### 1. Deep Technical Accuracy
-
-Your agent needs to answer questions like these correctly:
-
-- "What's the duty cycle for MIG welding at 200A on 240V?"
-- "I'm getting porosity in my flux-cored welds. What should I check?"
-- "What polarity setup do I need for TIG welding? Which socket does the ground clamp go in?"
-
-We will test with questions that require cross-referencing multiple manual sections, understanding visual content (diagrams, schematics, charts), and handling ambiguous questions that need clarification from the user.
-
-### 2. Multimodal Responses
-
-This is the most important part. Your agent must not be text-only.
-
-- If someone asks about polarity setup, the agent should draw or show a diagram of which cable goes in which socket, not just describe it.
-- If the answer relates to a specific image in the manual (the wire feed mechanism, the front panel controls, the weld diagnosis examples), the agent should surface that image.
-- If a question is complex enough, the agent should generate interactive content: a duty cycle calculator, a troubleshooting flowchart, a settings configurator that takes process + material + thickness and outputs recommended wire speed and voltage.
-
-When something is too cognitively hard to explain in words, the agent should draw it. Real-time diagrams, interactive schematics, visual walkthroughs generated through code.
-
-For your agent to handle these responses well you need to reverse engineer Claude artifacts. Here are two places where you can start:
-- https://claude.ai/artifacts (see how Claude renders interactive artifacts in chat)
-- https://www.reidbarber.com/blog/reverse-engineering-claude-artifacts
-
-### 3. Tone and Helpfulness
-
-Imagine your user just bought this welder and is standing in their garage trying to set it up. They're not an idiot, but they're not a professional welder either.
-
-### 4. Knowledge Extraction Quality
-
-The manual has a mix of text, tables, labeled diagrams, schematics, and decision matrices. Some critical information exists only in images (the welding process selection chart, the weld diagnosis photos, the wiring schematic). We want to see that your agent understands and presents the visual content, not just the text.
-
-## Tech Requirements
-
-- Use the [Anthropic Claude Agent SDK](https://docs.anthropic.com) as the foundation for your agent.
-- The project must run locally with a single API key provided via `.env`.
-- You are responsible for your own API costs during development.
-
-## How to Present Your Work
-
-**This matters.** Your submission is not just the code — it's how you present it.
-
-- **Build a frontend.** The best way for us to evaluate your agent is if it has a clean, simple UI we can run immediately. This is realistically the only way to properly demo an agent like this.
-- **Hosting is a plus.** If you host it somewhere we can access without cloning, that's a strong signal. Not required, but it removes friction and shows initiative.
-- **Write a clear README.** Explain how your agent works, what design decisions you made, how knowledge is extracted and represented, and how to run it. Your documentation will be evaluated — we want to see how you think and communicate, not just how you code.
-- **Video walkthrough is a huge plus.** Record yourself demoing the agent and explaining your approach. Walk through the hard questions, show how it handles multimodal responses, explain your architecture. This gives us a much richer picture of your work than code alone.
-
-We should be running your agent within 2 minutes of cloning your repo:
+## Quick Start
 
 ```bash
-git clone <your-fork>
-cd <your-fork>
-cp .env.example .env   # we plug in our own Anthropic API key
-# your install command (npm install, uv install, etc.)
-# your run command (npm run dev, python app.py, etc.)
+git clone https://github.com/sshtomar/prox-challenge.git
+cd prox-challenge
+pip install -r requirements.txt
+cp .env.example .env  # add your ANTHROPIC_API_KEY
+python server.py
 ```
 
-If it takes longer than that to set up, that's a problem.
+Open http://localhost:8000.
 
-## What to Submit
+## How It Works
 
-1. Fork this repo.
-2. Build your solution.
-3. Submit your fork URL through the form at [useprox.com/join/challenge](https://useprox.com/join/challenge).
+The agent is a RAG system with 7 custom tools registered through an MCP server, backed by structured JSON, BM25-indexed markdown, and 300 DPI page images from the 48-page owner's manual.
 
-## What Happens Next
+**Request flow:**
 
-We review submissions on a rolling basis and respond to every single one within a few days. Good luck.
+1. Frontend sends message + process context + voltage + session_id via POST /api/chat
+2. Server prepends process/voltage context to the message
+3. Server finds or creates a persistent ClaudeSDKClient for the session
+4. Claude Haiku reads the system prompt, decides which tools to call
+5. Tools execute (lookup_specs, search_manual_text, get_page_image, etc.)
+6. Agent synthesizes tool results into a response with page citations
+7. Response streams to the frontend via SSE
+
+## Architecture
+
+### Knowledge Base
+
+Built from 3 source PDFs processed through a two-stage pipeline: PDF rasterization at 300 DPI (pdf2image), then markdown extraction (IBM Docling).
+
+| File | Purpose |
+|------|---------|
+| `specs.json` | Structured specs for all 4 processes at 120V/240V. Single source of truth for numbers. |
+| `troubleshooting.json` | Problem/Cause/Solution matrices. Three sections for direct lookup. |
+| `page_index.json` | Metadata for all 51 pages: sections, topics, content types. |
+| `markdown/owner-manual.md` | Full text chunked into 111 sections by `##` headers for BM25 indexing. |
+| `pages/*.png` | 300 DPI rasterizations of every page. Served as static files via `/pages/`. |
+| `page_descriptions/*.md` | Hand-written descriptions of 22 critical visual pages. |
+
+### Tools
+
+7 tools, each built for a specific query pattern. All read-only, instrumented with Logfire spans.
+
+| Tool | What It Does |
+|------|-------------|
+| `lookup_specs` | Returns exact specs from specs.json. Filters by process. Never estimates -- reads curated JSON. |
+| `lookup_troubleshooting` | Returns structured Problem/Cause/Solution data. Routes to the right section by keyword. |
+| `get_polarity_quick_reference` | Returns polarity config (DCEP/DCEN, which socket) per process. |
+| `search_manual_text` | BM25 relevance-ranked search across 111 manual sections. Top 5 results with scores. |
+| `get_page_description` | Returns a text description of a visual page (diagrams, schematics, LCD screens). |
+| `get_page_image` | Returns the URL to a page PNG for inline display in chat. |
+| `search_pages_by_topic` | Searches page_index.json to find which pages cover a topic. |
+
+### Anti-Hallucination Design
+
+Hallucination in a welding manual agent is dangerous -- a wrong duty cycle could cause a fire, wrong polarity could damage equipment. Five layers of defense:
+
+1. **Structured data store** -- specs and troubleshooting are curated JSON, not LLM-extracted text
+2. **System prompt guardrails** -- "never guess technical values", "admit limits honestly"
+3. **Query routing** -- spec questions go to lookup_specs, not to free-text search
+4. **Citation requirements** -- bracket format [p.7] forces the agent to trace claims to sources
+5. **Adversarial eval suite** -- 8 test cases (H01-H08) specifically test for hallucination. 8/8 passed.
+
+### Frontend
+
+Three-panel layout designed for someone standing in their garage with a phone:
+
+- **Left (220px):** Process selector with quick setup wizard (material + thickness)
+- **Center:** Chat with markdown rendering, tables, inline images, and sandboxed HTML artifacts
+- **Right (280px):** Live context panel showing duty cycles, polarity, and specs for the selected process
+
+Voice input via Web Speech API. Typing indicator with animated dots. HTML code blocks render as interactive artifacts in sandboxed iframes.
+
+### Deployment
+
+Single FastAPI process on Railway. Loads 33MB knowledge base into memory at startup, serves both frontend and API. SSE streaming with `Cache-Control: no-cache` and `X-Accel-Buffering: no` headers.
+
+| Parameter | Value |
+|-----------|-------|
+| Model | claude-haiku-4-5-20251001 |
+| Effort | low |
+| Max turns | 8 |
+| Max budget | $0.25/query |
+| Avg query cost | ~$0.03 |
+| Avg response time | 15-20s |
+
+### Observability
+
+Every request and tool call instrumented with Pydantic Logfire (OpenTelemetry spans). Tracked metrics: latency_ms, tool_call_count, tools_called, tool_frequency, response_chars, BM25 top_score.
+
+## Evaluation
+
+58 test cases across 3 dimensions:
+
+- **Query type** (7 values): troubleshooting, spec_lookup, setup_configuration, process_guidance, comparison_purchase, safety, weld_diagnosis
+- **Welding process** (6 values): MIG, flux_cored, TIG, stick, cross_process, general
+- **Difficulty** (4 values): direct_lookup, multi_hop, unanswerable, ambiguous
+
+Data sources: 20 Reddit cases from real users (r/Welding, r/harborfreight), 30 synthetic gap-fillers, 8 adversarial hallucination traps.
+
+```bash
+python run_eval.py 10                    # run 10 random cases
+python run_eval.py --hallucination       # run hallucination suite
+python run_eval.py --faithfulness        # run with LLM-as-judge scoring
+```
+
+## Project Structure
+
+```
+server.py              FastAPI server + tools + system prompt
+agent.py               CLI agent for testing
+preprocess.py          PDF -> PNG + Markdown pipeline
+run_eval.py            Evaluation harness
+eval_dataset.json      58 test cases with tuples and expected tools
+knowledge_base/
+  specs.json           Structured specifications
+  troubleshooting.json Problem/cause/solution matrices
+  page_index.json      Page metadata and topic index
+  markdown/            Full manual markdown (Docling output)
+  pages/               300 DPI PNG page images
+  page_descriptions/   Text descriptions of visual pages
+static/
+  index.html           Frontend SPA
+railway.json           Railway deployment config
+requirements.txt       Python dependencies
+```
+
+## Documentation
+
+Full design report with architecture decisions, prompt engineering details, eval methodology, and cost analysis: [Vulcan Omnipro 220 - Support Agent.pdf](Vulcan%20Omnipro%20220%20-%20Support%20Agent.pdf)
