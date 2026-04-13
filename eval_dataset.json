@@ -1,0 +1,631 @@
+{
+  "metadata": {
+    "description": "Evaluation dataset for the Vulcan OmniPro 220 Technical Support Agent",
+    "methodology": "Dimension-based tuple generation (Hamel Husain's generate-synthetic-data) enriched with real Reddit queries",
+    "created": "2026-04-10",
+    "dimensions": {
+      "query_type": {
+        "description": "What the user needs from the agent",
+        "values": ["troubleshooting", "spec_lookup", "setup_configuration", "process_guidance", "comparison_purchase", "safety", "weld_diagnosis"]
+      },
+      "welding_process": {
+        "description": "Which welding process is relevant",
+        "values": ["MIG", "flux_cored", "TIG", "stick", "cross_process", "general"]
+      },
+      "difficulty": {
+        "description": "How hard this is for the RAG system to answer correctly",
+        "values": ["direct_lookup", "multi_hop", "unanswerable", "ambiguous"]
+      }
+    },
+    "sources": {
+      "reddit": "Queries derived from real Reddit posts in r/Welding, r/harborfreight, r/metalworking, r/Generator",
+      "synthetic": "Queries generated to fill gaps in tuple coverage"
+    }
+  },
+
+  "eval_cases": [
+    {
+      "id": "EVAL-001",
+      "query": "I'm using my Vulcan OmniPro 220 on MIG and every time I press the trigger it feeds wire for a couple seconds then stops. Only works if I use the foot pedal instead. What's going on?",
+      "tuple": ["troubleshooting", "MIG", "multi_hop"],
+      "source": "reddit",
+      "source_detail": "r/Welding, u/No_Perception8626",
+      "expected_tools": ["lookup_troubleshooting", "search_manual_text"],
+      "ground_truth_pages": [42, 43, 17],
+      "notes": "Agent must identify wire feed issues AND recognize the trigger vs pedal activation distinction. The manual covers wire stopping but the pedal-only behavior suggests a trigger or control board issue."
+    },
+    {
+      "id": "EVAL-002",
+      "query": "My OmniPro 220 TIG torch won't produce a stable arc. It behaves similar to TIG welding near a magnet -- the arc wanders all over the place. There are no magnetic fields near my welding area. Any ideas?",
+      "tuple": ["troubleshooting", "TIG", "multi_hop"],
+      "source": "reddit",
+      "source_detail": "r/Welding, u/dreadpirate_metalart",
+      "expected_tools": ["lookup_troubleshooting", "search_manual_text", "get_page_description"],
+      "ground_truth_pages": [44, 27, 28],
+      "notes": "Arc blow symptoms without obvious magnetic source. Agent should reference TIG troubleshooting for unstable arc and potentially mention grounding, cable routing, and electrode condition."
+    },
+    {
+      "id": "EVAL-003",
+      "query": "My Vulcan OmniPro 220 displays a fault message about voltage every time I shut it off. Everything works fine -- MIG, TIG, and stick all weld properly. Is this a programming bug or something I should worry about? I bought it second hand so I don't know about warranty.",
+      "tuple": ["troubleshooting", "general", "multi_hop"],
+      "source": "reddit",
+      "source_detail": "r/harborfreight, u/leboi22",
+      "expected_tools": ["lookup_troubleshooting", "search_manual_text"],
+      "ground_truth_pages": [42, 44, 7],
+      "notes": "Voltage fault on shutdown. Agent must check whether this is a known error behavior and reference warranty info (90-day limited, may not cover second-hand)."
+    },
+    {
+      "id": "EVAL-004",
+      "query": "My OmniPro 220 stopped feeding wire entirely. The cold wire feed works fine, but when I pull the trigger, the motor and gas don't activate. I checked continuity on the trigger and cable -- everything looks good. I think it might be the smaller control board. Can I get a replacement part?",
+      "tuple": ["troubleshooting", "MIG", "unanswerable"],
+      "source": "reddit",
+      "source_detail": "r/Welding, u/acepilot1212",
+      "expected_tools": ["lookup_troubleshooting", "search_manual_text"],
+      "ground_truth_pages": [42, 43],
+      "notes": "The manual covers wire feed troubleshooting but does NOT cover control board replacement parts sourcing. Agent should provide relevant troubleshooting AND honestly state that replacement part sourcing is beyond its scope."
+    },
+    {
+      "id": "EVAL-005",
+      "query": "My OmniPro 220 just died. Found out the power switch on the front was fried on one leg. It's a 20A switch but the machine draws up to 20A continuous. Is this a known problem? What replacement switch should I use?",
+      "tuple": ["troubleshooting", "general", "unanswerable"],
+      "source": "reddit",
+      "source_detail": "r/Welding, u/Shrimpkin",
+      "expected_tools": ["lookup_troubleshooting", "lookup_specs"],
+      "ground_truth_pages": [7, 42, 44],
+      "notes": "The manual does not document a known power switch failure or recommend aftermarket replacement switches. Agent should reference specs for max draw and the 'LCD Does Not Light' troubleshooting section, but should not fabricate repair advice."
+    },
+    {
+      "id": "EVAL-006",
+      "query": "My Vulcan OmniPro 220 immediately trips the thermal overload when I try to weld on my generator. I'm using the 30A 220V outlet and no breakers on the generator trip. The generator is a Champion 9200 running watt. What's happening?",
+      "tuple": ["troubleshooting", "general", "multi_hop"],
+      "source": "reddit",
+      "source_detail": "r/Welding, u/SloppySutter",
+      "expected_tools": ["lookup_troubleshooting", "lookup_specs", "search_manual_text"],
+      "ground_truth_pages": [7, 19, 42, 44],
+      "notes": "Inverter welder + generator compatibility issue. Manual warns about input voltage requirements but doesn't specifically address generator dirty power / frequency issues. Agent needs to cross-reference input specs, thermal overload troubleshooting, and duty cycle info."
+    },
+    {
+      "id": "EVAL-007",
+      "query": "What gauge wire and breaker do I need for my Vulcan OmniPro 220? I want to run a dedicated 240V circuit. Should I use 10 gauge with a 30A breaker or go bigger with 8 gauge and a 40-50A breaker for startup headroom?",
+      "tuple": ["setup_configuration", "general", "direct_lookup"],
+      "source": "reddit",
+      "source_detail": "r/Welding, u/beerisg00d",
+      "expected_tools": ["lookup_specs", "search_manual_text"],
+      "ground_truth_pages": [7, 5, 6],
+      "notes": "The specs page lists input current requirements. Agent should reference exact amp draw at 240V (25.5A max for MIG) and the manual's electrical requirements section."
+    },
+    {
+      "id": "EVAL-008",
+      "query": "The front of my OmniPro 220 has a gas connector. Is that for TIG gas or for the spool gun? It seems like TIG gas just plugs directly from the torch into the bottle with no machine-controlled solenoid. Is there any way to get pre-post gas flow control for TIG?",
+      "tuple": ["setup_configuration", "TIG", "multi_hop"],
+      "source": "reddit",
+      "source_detail": "r/harborfreight, u/diymatt",
+      "expected_tools": ["search_manual_text", "get_page_description", "get_page_image"],
+      "ground_truth_pages": [8, 9, 13, 27],
+      "notes": "This is a nuanced question about gas flow routing in TIG mode. The agent needs to explain the front panel gas connector purpose and the TIG gas configuration accurately."
+    },
+    {
+      "id": "EVAL-009",
+      "query": "I just got my OmniPro 220 and want to upgrade the TIG torch and cables. Can I use a CK Worldwide torch? What connector does the machine use? Also, should I get the Vulcan foot pedal or an aftermarket one?",
+      "tuple": ["setup_configuration", "TIG", "multi_hop"],
+      "source": "reddit",
+      "source_detail": "r/harborfreight, u/Jpl3k (adapted)",
+      "expected_tools": ["search_manual_text", "get_page_description", "get_polarity_quick_reference"],
+      "ground_truth_pages": [8, 9, 13, 27, 28],
+      "notes": "Aftermarket compatibility is partially beyond manual scope, but the agent should describe the existing connector types and torch specifications so the user can match them."
+    },
+    {
+      "id": "EVAL-010",
+      "query": "Can I plug my OmniPro 220 into a regular household outlet in my backyard? I don't have 240V out there.",
+      "tuple": ["setup_configuration", "general", "direct_lookup"],
+      "source": "reddit",
+      "source_detail": "r/Welding, u/Educational-Cake7350",
+      "expected_tools": ["lookup_specs", "search_manual_text"],
+      "ground_truth_pages": [5, 6, 7],
+      "notes": "The machine supports both 120V and 240V. Agent should confirm 120V works but explain the reduced amperage and duty cycle limitations."
+    },
+    {
+      "id": "EVAL-011",
+      "query": "What's the duty cycle on the OmniPro 220 for MIG at 240V? I need to know how long I can weld continuously at 200 amps.",
+      "tuple": ["spec_lookup", "MIG", "direct_lookup"],
+      "source": "synthetic",
+      "source_detail": "Common question pattern from Reddit threads",
+      "expected_tools": ["lookup_specs"],
+      "ground_truth_pages": [7, 19],
+      "ground_truth_answer": "25% duty cycle at 200A on 240VAC -- 2.5 minutes welding, 7.5 minutes rest per 10-minute cycle. 100% duty cycle at 115A.",
+      "notes": "Critical safety-related spec. Agent MUST return exact values from specs.json, never estimate."
+    },
+    {
+      "id": "EVAL-012",
+      "query": "What wire sizes can I run in my OmniPro 220 for MIG welding? And what about flux core?",
+      "tuple": ["spec_lookup", "cross_process", "direct_lookup"],
+      "source": "synthetic",
+      "source_detail": "Derived from common Reddit questions about wire",
+      "expected_tools": ["lookup_specs"],
+      "ground_truth_pages": [7],
+      "ground_truth_answer": "Solid core (MIG): 0.025\", 0.030\", 0.035\". Flux-cored: 0.030\", 0.035\", 0.045\".",
+      "notes": "Straightforward spec lookup. Agent should return exact values."
+    },
+    {
+      "id": "EVAL-013",
+      "query": "I understand the OmniPro 220 is DC only. Is that going to be a dealbreaker for welding aluminum and stainless? I'm rebuilding a Jeep CJ5 and eventually want to do an aluminum boat.",
+      "tuple": ["process_guidance", "cross_process", "multi_hop"],
+      "source": "reddit",
+      "source_detail": "r/harborfreight, u/Abstruseish",
+      "expected_tools": ["lookup_specs", "search_manual_text", "search_pages_by_topic"],
+      "ground_truth_pages": [7, 30, 31],
+      "notes": "Agent must explain: DC TIG works for stainless but not aluminum (AC TIG needed). MIG aluminum is possible via optional spool gun. This requires cross-referencing specs and process capabilities."
+    },
+    {
+      "id": "EVAL-014",
+      "query": "I want a multiprocess welder to learn all the different processes. Would the OmniPro 220 be good for a complete beginner with zero experience? Is it too much machine to learn on?",
+      "tuple": ["comparison_purchase", "general", "ambiguous"],
+      "source": "reddit",
+      "source_detail": "r/Welding, u/-DaveDaDopefiend- (adapted)",
+      "expected_tools": ["search_manual_text", "lookup_specs"],
+      "ground_truth_pages": [7, 8, 9],
+      "notes": "Subjective question. Agent should stick to factual capabilities (synergic control, LCD interface, multiple processes) without making purchase recommendations. Should note the machine's auto-adjust feature for beginners."
+    },
+    {
+      "id": "EVAL-015",
+      "query": "Vulcan OmniPro 220 vs Miller Multimatic 215 -- which is the better buy for home repairs, project building, and hobby work?",
+      "tuple": ["comparison_purchase", "general", "unanswerable"],
+      "source": "reddit",
+      "source_detail": "r/metalworking, u/barcelonaleo10",
+      "expected_tools": ["lookup_specs"],
+      "ground_truth_pages": [7],
+      "notes": "Agent should ONLY provide OmniPro 220 specs and capabilities. It should NOT make comparative claims about the Miller or recommend one over the other. The Miller is outside its knowledge base."
+    },
+    {
+      "id": "EVAL-016",
+      "query": "How do I set up the polarity for flux-cored welding on my OmniPro 220? I've been MIG welding and want to switch to flux core for outdoor work.",
+      "tuple": ["setup_configuration", "flux_cored", "direct_lookup"],
+      "source": "synthetic",
+      "source_detail": "Common scenario from Reddit discussions",
+      "expected_tools": ["get_polarity_quick_reference", "get_page_description", "get_page_image"],
+      "ground_truth_pages": [13, 14, 15],
+      "notes": "Critical configuration question. Polarity must be DCEN for flux-cored self-shielded. Agent should show the polarity diagram and walk through the cable swap."
+    },
+    {
+      "id": "EVAL-017",
+      "query": "What amperage range does the OmniPro 220 give me for TIG welding on 120V? I want to TIG weld some thin stainless steel tubing.",
+      "tuple": ["spec_lookup", "TIG", "direct_lookup"],
+      "source": "synthetic",
+      "source_detail": "Common spec question pattern",
+      "expected_tools": ["lookup_specs"],
+      "ground_truth_pages": [7],
+      "ground_truth_answer": "TIG at 120VAC: 10-125A welding current range. 40% duty cycle at 125A.",
+      "notes": "Direct spec lookup. For thin stainless tubing, the low end of 10A is relevant."
+    },
+    {
+      "id": "EVAL-018",
+      "query": "My MIG welds have porosity all through them. I just changed to a new gas bottle. What could be causing this on my OmniPro 220?",
+      "tuple": ["weld_diagnosis", "MIG", "direct_lookup"],
+      "source": "synthetic",
+      "source_detail": "Derived from troubleshooting.json weld diagnosis patterns",
+      "expected_tools": ["lookup_troubleshooting"],
+      "ground_truth_pages": [35, 42, 43],
+      "notes": "Direct troubleshooting lookup. Manual lists 6 causes for porosity: empty gas, wrong flow rate, dirty workpiece, wrong CTWD, wrong polarity, dirty wire."
+    },
+    {
+      "id": "EVAL-019",
+      "query": "I just got my OmniPro 220 but the MIG gun that came with it feels cheap. Is it a Tweco-style connector? Can I swap it for a real Tweco gun as a direct replacement?",
+      "tuple": ["setup_configuration", "MIG", "ambiguous"],
+      "source": "reddit",
+      "source_detail": "r/Welding, u/AtmosphereCreative95",
+      "expected_tools": ["search_manual_text", "get_page_description"],
+      "ground_truth_pages": [8, 12, 13],
+      "notes": "The manual describes the included MIG gun but doesn't explicitly state Tweco compatibility. Agent should describe the connector and let the user judge, not make claims about third-party compatibility."
+    },
+    {
+      "id": "EVAL-020",
+      "query": "What size generator do I need to run my OmniPro 220 for MIG welding at full power on 240V? I want to set up a portable mobile welding rig.",
+      "tuple": ["setup_configuration", "MIG", "multi_hop"],
+      "source": "reddit",
+      "source_detail": "r/Generator, u/Rude-Vehicle1556 (adapted)",
+      "expected_tools": ["lookup_specs", "search_manual_text"],
+      "ground_truth_pages": [5, 6, 7],
+      "notes": "Agent should provide the max input current draw (25.5A at 200A output on 240VAC = ~5500W) so the user can size their generator. Should mention that inverter generators may cause issues per input voltage requirements."
+    },
+    {
+      "id": "EVAL-021",
+      "query": "What are the correct polarity settings for each welding process on the OmniPro 220? I keep getting confused about which cables go where when I switch between MIG, flux core, TIG, and stick.",
+      "tuple": ["setup_configuration", "cross_process", "multi_hop"],
+      "source": "synthetic",
+      "source_detail": "Extremely common confusion point from Reddit",
+      "expected_tools": ["get_polarity_quick_reference", "get_page_description", "get_page_image"],
+      "ground_truth_pages": [13, 14, 15],
+      "notes": "Must correctly state: MIG=DCEP, Flux-Cored=DCEN, TIG=DCEN, Stick=varies by electrode (DCEP for most). The polarity diagrams on pages 13-14 are critical here."
+    },
+    {
+      "id": "EVAL-022",
+      "query": "My weld beads look like the voltage is too high -- lots of spatter and flat, wide beads. I'm running MIG on 240V with 0.030 wire on 1/8 inch mild steel. What settings should I be using?",
+      "tuple": ["weld_diagnosis", "MIG", "multi_hop"],
+      "source": "synthetic",
+      "source_detail": "Common weld quality question pattern",
+      "expected_tools": ["lookup_troubleshooting", "search_manual_text", "search_pages_by_topic"],
+      "ground_truth_pages": [35, 42, 43],
+      "notes": "Agent should reference the weld diagnosis chart (voltage too high symptoms) and the selection chart for recommended settings for 1/8 inch mild steel."
+    },
+    {
+      "id": "EVAL-023",
+      "query": "How do I set up my OmniPro 220 for stick welding? Which socket do I plug the electrode holder into and where does the ground clamp go?",
+      "tuple": ["setup_configuration", "stick", "direct_lookup"],
+      "source": "synthetic",
+      "source_detail": "Basic setup question",
+      "expected_tools": ["get_polarity_quick_reference", "get_page_description", "get_page_image"],
+      "ground_truth_pages": [13, 14, 29, 30],
+      "notes": "Direct setup question. Agent should reference the polarity diagram for stick welding and the stick welding section of the manual."
+    },
+    {
+      "id": "EVAL-024",
+      "query": "I keep getting arc blow when I'm stick welding thick plate on my OmniPro 220. The arc keeps deflecting to one side. How do I fix this?",
+      "tuple": ["troubleshooting", "stick", "ambiguous"],
+      "source": "synthetic",
+      "source_detail": "Common stick welding issue",
+      "expected_tools": ["lookup_troubleshooting", "search_manual_text"],
+      "ground_truth_pages": [44],
+      "notes": "Arc blow is a common welding phenomenon. The manual has limited coverage. Agent should provide what the manual says about unstable arc and grounding, and honestly acknowledge limitations if the manual doesn't cover arc blow specifically."
+    },
+    {
+      "id": "EVAL-025",
+      "query": "What's the maximum thickness of steel I can weld with the OmniPro 220 on stick at 120V?",
+      "tuple": ["spec_lookup", "stick", "direct_lookup"],
+      "source": "synthetic",
+      "source_detail": "Common capability question",
+      "expected_tools": ["lookup_specs"],
+      "ground_truth_pages": [7],
+      "notes": "Agent should provide the stick welding current range at 120V and reference electrode specifications, but should note if maximum thickness isn't explicitly stated in the manual."
+    },
+    {
+      "id": "EVAL-026",
+      "query": "Where can I buy replacement drive rollers for the OmniPro 220? The ones that came with it are getting worn.",
+      "tuple": ["setup_configuration", "MIG", "unanswerable"],
+      "source": "synthetic",
+      "source_detail": "Parts sourcing -- common Reddit concern",
+      "expected_tools": ["search_manual_text"],
+      "ground_truth_pages": [12],
+      "notes": "The manual describes drive roller specs and how to change them, but does NOT provide purchasing information for replacement parts. Agent should describe the roller specs and direct user to Harbor Freight support."
+    },
+    {
+      "id": "EVAL-027",
+      "query": "Is the OmniPro 220 safe to use in my garage? What kind of ventilation do I need?",
+      "tuple": ["safety", "general", "direct_lookup"],
+      "source": "synthetic",
+      "source_detail": "Safety question pattern",
+      "expected_tools": ["search_manual_text", "search_pages_by_topic"],
+      "ground_truth_pages": [2, 3, 4],
+      "notes": "Safety-critical question. The manual has dedicated safety sections about ventilation, fumes, and workspace requirements."
+    },
+    {
+      "id": "EVAL-028",
+      "query": "I want to weld aluminum with my OmniPro 220. Do I need the spool gun or can I just use regular MIG wire and run it through the standard gun?",
+      "tuple": ["process_guidance", "MIG", "direct_lookup"],
+      "source": "synthetic",
+      "source_detail": "Derived from multiple Reddit aluminum questions",
+      "expected_tools": ["lookup_specs", "search_manual_text"],
+      "ground_truth_pages": [7, 8, 31],
+      "notes": "The specs explicitly say aluminum is weldable 'with optional Spool Gun'. Agent must be clear that standard MIG gun is not recommended for aluminum wire feeding."
+    },
+    {
+      "id": "EVAL-029",
+      "query": "What's the wire feed speed range on the OmniPro 220? My wire seems to be feeding too fast even on the lowest setting.",
+      "tuple": ["spec_lookup", "MIG", "direct_lookup"],
+      "source": "synthetic",
+      "source_detail": "Common wire feed question",
+      "expected_tools": ["lookup_specs"],
+      "ground_truth_pages": [7],
+      "ground_truth_answer": "Wire feed speed range: 50-500 IPM.",
+      "notes": "If the lowest setting (50 IPM) is still too fast, this may indicate a calibration issue or wrong wire/tip combination."
+    },
+    {
+      "id": "EVAL-030",
+      "query": "I'm getting excessive spatter when MIG welding. I've tried adjusting voltage and wire speed but nothing helps. Could it be a polarity issue?",
+      "tuple": ["weld_diagnosis", "MIG", "multi_hop"],
+      "source": "synthetic",
+      "source_detail": "Weld quality diagnosis",
+      "expected_tools": ["lookup_troubleshooting", "get_polarity_quick_reference"],
+      "ground_truth_pages": [35, 42, 43, 13],
+      "notes": "Agent should check: polarity (MIG must be DCEP), gas flow, CTWD, and voltage/wire speed settings. The weld diagnosis chart and polarity reference are both needed."
+    },
+    {
+      "id": "EVAL-031",
+      "query": "How do I use the LCD synergic controls on my OmniPro 220? When I select a material thickness does it automatically set the voltage and wire speed?",
+      "tuple": ["setup_configuration", "general", "direct_lookup"],
+      "source": "synthetic",
+      "source_detail": "UI/controls question common among new users",
+      "expected_tools": ["get_page_description", "get_page_image", "search_manual_text"],
+      "ground_truth_pages": [8, 9, 10],
+      "notes": "The synergic control system is a key feature. Agent should describe the LCD interface and explain how the auto-setting works."
+    },
+    {
+      "id": "EVAL-032",
+      "query": "Where is the reset button on the OmniPro 220? My machine keeps shutting off and I see something about low voltage on the display.",
+      "tuple": ["troubleshooting", "general", "direct_lookup"],
+      "source": "synthetic",
+      "source_detail": "Derived from troubleshooting.json references to reset button",
+      "expected_tools": ["lookup_troubleshooting", "get_page_description", "search_manual_text"],
+      "ground_truth_pages": [8, 9, 42, 44],
+      "notes": "Troubleshooting guide mentions 'press Reset Button on back of machine'. Agent should locate and describe the reset button and address the voltage protection issue."
+    },
+    {
+      "id": "EVAL-033",
+      "query": "Can I use E6013 rods with the OmniPro 220 on 120V? What amperage should I set it to?",
+      "tuple": ["process_guidance", "stick", "multi_hop"],
+      "source": "synthetic",
+      "source_detail": "Electrode selection question",
+      "expected_tools": ["lookup_specs", "search_manual_text", "get_polarity_quick_reference"],
+      "ground_truth_pages": [7, 29, 30],
+      "notes": "Agent needs to reference stick welding specs at 120V, electrode compatibility, and recommended amperage for E6013. Must check if this rod type is covered in the manual."
+    },
+    {
+      "id": "EVAL-034",
+      "query": "My OmniPro 220 MIG feeds wire and gas for about three seconds then the drive roll stops but the gas keeps flowing. This is driving me crazy. Brand new machine, was working fine for 20 minutes then started doing this.",
+      "tuple": ["troubleshooting", "MIG", "multi_hop"],
+      "source": "reddit",
+      "source_detail": "r/Welding, u/BeardedBulldog69",
+      "expected_tools": ["lookup_troubleshooting", "search_manual_text"],
+      "ground_truth_pages": [42, 43, 17],
+      "notes": "Gas continues but wire stops -- suggests an issue with the wire feed system specifically (not the trigger circuit since gas still flows). Agent should distinguish between trigger, motor, and feed path issues."
+    },
+    {
+      "id": "EVAL-035",
+      "query": "I bought a used OmniPro 220 at a parking lot sale for $340 but it's missing the 220V cord, regulator, and gas hose. What parts do I need to get to make it complete? Can I use non-Vulcan brand parts?",
+      "tuple": ["setup_configuration", "general", "multi_hop"],
+      "source": "reddit",
+      "source_detail": "r/harborfreight, u/kidintraffic (adapted)",
+      "expected_tools": ["lookup_specs", "search_manual_text", "get_page_description"],
+      "ground_truth_pages": [5, 6, 7, 8],
+      "notes": "Agent should identify the power cord type (twist lock, 240V), gas regulator requirements, and hose specs from the manual. Parts brand compatibility is partially outside scope."
+    },
+    {
+      "id": "EVAL-036",
+      "query": "What's the OCV on the OmniPro 220? Is 86 volts safe?",
+      "tuple": ["spec_lookup", "general", "direct_lookup"],
+      "source": "synthetic",
+      "source_detail": "Safety/spec question",
+      "expected_tools": ["lookup_specs", "search_manual_text"],
+      "ground_truth_pages": [7, 2, 3],
+      "ground_truth_answer": "Maximum OCV is 86VDC.",
+      "notes": "Agent should provide the spec and reference relevant safety warnings about open circuit voltage."
+    },
+    {
+      "id": "EVAL-037",
+      "query": "I'm looking into getting a dedicated TIG machine because the OmniPro 220 is only lift start and DC. Can the OmniPro do HF start? Can it do AC TIG for aluminum at all?",
+      "tuple": ["spec_lookup", "TIG", "direct_lookup"],
+      "source": "reddit",
+      "source_detail": "r/Welding, u/Americanonymous (adapted)",
+      "expected_tools": ["lookup_specs", "search_manual_text"],
+      "ground_truth_pages": [7, 27, 28],
+      "notes": "The OmniPro 220 does NOT have HF start or AC output. Agent must clearly state these limitations without hedging."
+    },
+    {
+      "id": "EVAL-038",
+      "query": "How do I read the duty cycle ratings? What does '40% at 100A' actually mean in practical terms -- how long can I weld before I have to stop?",
+      "tuple": ["spec_lookup", "general", "direct_lookup"],
+      "source": "synthetic",
+      "source_detail": "Beginner question about reading specs",
+      "expected_tools": ["lookup_specs", "search_manual_text"],
+      "ground_truth_pages": [7, 19],
+      "ground_truth_answer": "40% duty cycle at 100A means in a 10-minute period: weld for 4 minutes, rest for 6 minutes.",
+      "notes": "Educational question. Agent should explain the concept AND give the specific values for the OmniPro 220."
+    },
+    {
+      "id": "EVAL-039",
+      "query": "What contact tips come with the OmniPro 220 and what sizes do I need for different wire sizes?",
+      "tuple": ["spec_lookup", "MIG", "direct_lookup"],
+      "source": "synthetic",
+      "source_detail": "Common consumables question",
+      "expected_tools": ["search_manual_text", "lookup_specs"],
+      "ground_truth_pages": [7, 12],
+      "notes": "Agent should list contact tip sizes that match the supported wire sizes (0.025\", 0.030\", 0.035\" for solid core; 0.030\", 0.035\", 0.045\" for flux-cored)."
+    },
+    {
+      "id": "EVAL-040",
+      "query": "Can the OmniPro 220 weld 1/2 inch thick steel plate? What process and settings would I need?",
+      "tuple": ["process_guidance", "cross_process", "multi_hop"],
+      "source": "synthetic",
+      "source_detail": "Capability limits question",
+      "expected_tools": ["lookup_specs", "search_manual_text"],
+      "ground_truth_pages": [7, 30],
+      "notes": "This is at the upper limit of the machine's capability on 240V. Agent should reference maximum amperage for stick/MIG and be honest about whether multi-pass would be needed."
+    },
+    {
+      "id": "EVAL-041",
+      "query": "Show me the wiring diagram or schematic for the OmniPro 220. I need to trace an electrical issue.",
+      "tuple": ["troubleshooting", "general", "direct_lookup"],
+      "source": "synthetic",
+      "source_detail": "Advanced troubleshooting",
+      "expected_tools": ["get_page_description", "get_page_image", "search_pages_by_topic"],
+      "ground_truth_pages": [45],
+      "notes": "The schematic is on page 45. Agent should use get_page_image to show it and get_page_description to explain what's visible."
+    },
+    {
+      "id": "EVAL-042",
+      "query": "Can this welder do pulse MIG? I want to weld thin stainless without blowing through it.",
+      "tuple": ["spec_lookup", "MIG", "direct_lookup"],
+      "source": "synthetic",
+      "source_detail": "Feature inquiry",
+      "expected_tools": ["lookup_specs", "search_manual_text"],
+      "ground_truth_pages": [7, 8],
+      "notes": "Agent should check whether pulse MIG is a documented feature. If not, it should say so clearly rather than guessing."
+    },
+    {
+      "id": "EVAL-043",
+      "query": "What does the front panel of the OmniPro 220 look like? Can you walk me through all the controls and what they do?",
+      "tuple": ["setup_configuration", "general", "direct_lookup"],
+      "source": "synthetic",
+      "source_detail": "New owner orientation question",
+      "expected_tools": ["get_page_description", "get_page_image"],
+      "ground_truth_pages": [8, 9],
+      "notes": "Agent should show the front panel image and describe all controls: LCD display, process selector, voltage/wire speed knobs, etc."
+    },
+    {
+      "id": "EVAL-044",
+      "query": "I'm welding outdoors and the wind keeps blowing my shielding gas away. Should I switch from MIG to flux-cored? How do I make the switch on the OmniPro 220?",
+      "tuple": ["process_guidance", "flux_cored", "multi_hop"],
+      "source": "synthetic",
+      "source_detail": "Practical process selection + configuration",
+      "expected_tools": ["get_polarity_quick_reference", "lookup_specs", "search_manual_text"],
+      "ground_truth_pages": [13, 14, 15, 7],
+      "notes": "Agent should confirm flux-cored is better for wind, then walk through the full changeover: polarity swap (DCEP to DCEN), wire change, contact tip change, gas disconnection for self-shielded flux-cored."
+    },
+    {
+      "id": "EVAL-045",
+      "query": "What is the warranty on the Vulcan OmniPro 220? I bought mine used off Craigslist -- am I covered?",
+      "tuple": ["comparison_purchase", "general", "direct_lookup"],
+      "source": "reddit",
+      "source_detail": "r/harborfreight, u/leboi22 (adapted)",
+      "expected_tools": ["search_manual_text", "lookup_specs"],
+      "ground_truth_pages": [7, 47, 48],
+      "ground_truth_answer": "Limited 90 Day Warranty.",
+      "notes": "Agent should provide warranty info and note that second-hand purchases may not be covered. Should direct to Harbor Freight support for warranty questions."
+    },
+    {
+      "id": "EVAL-046",
+      "query": "I see a bird's nest of wire tangled up inside my OmniPro 220 near the feed rollers. How do I fix this and prevent it from happening again?",
+      "tuple": ["troubleshooting", "MIG", "direct_lookup"],
+      "source": "synthetic",
+      "source_detail": "Common wire feed issue",
+      "expected_tools": ["lookup_troubleshooting"],
+      "ground_truth_pages": [42, 43, 12, 17],
+      "notes": "Direct troubleshooting match. Manual lists 4 causes: excess feed pressure, incorrect contact tip, gun cable connector not fully inserted, damaged liner."
+    },
+    {
+      "id": "EVAL-047",
+      "query": "Can I weld cast iron with the OmniPro 220?",
+      "tuple": ["process_guidance", "stick", "ambiguous"],
+      "source": "synthetic",
+      "source_detail": "Material compatibility question",
+      "expected_tools": ["lookup_specs", "search_manual_text"],
+      "ground_truth_pages": [7],
+      "notes": "Cast iron is NOT listed in the weldable materials. Agent should state what materials are listed (mild steel, stainless steel, aluminum with spool gun) and be honest that cast iron isn't specifically documented."
+    },
+    {
+      "id": "EVAL-048",
+      "query": "What's the difference between using the OmniPro 220 on 120V vs 240V? Is it worth running 240V to my shop?",
+      "tuple": ["spec_lookup", "cross_process", "multi_hop"],
+      "source": "synthetic",
+      "source_detail": "Extremely common Reddit question pattern",
+      "expected_tools": ["lookup_specs"],
+      "ground_truth_pages": [7],
+      "notes": "Agent should compare all four processes at both voltages: amperage ranges, duty cycles. This is a multi-hop query across the full specs table."
+    },
+    {
+      "id": "EVAL-049",
+      "query": "How often do I need to replace the liner in my MIG gun? And how do I do it?",
+      "tuple": ["setup_configuration", "MIG", "direct_lookup"],
+      "source": "synthetic",
+      "source_detail": "Maintenance question",
+      "expected_tools": ["search_manual_text", "search_pages_by_topic"],
+      "ground_truth_pages": [12, 36, 37],
+      "notes": "The manual should cover liner replacement procedures. Replacement frequency is typically not specified precisely -- agent should reference symptoms of a worn liner."
+    },
+    {
+      "id": "EVAL-050",
+      "query": "I just want to learn to weld in my garage. I've never welded before. Should I start with MIG, TIG, stick, or flux core on my new OmniPro 220?",
+      "tuple": ["process_guidance", "cross_process", "ambiguous"],
+      "source": "reddit",
+      "source_detail": "Common beginner question across multiple threads",
+      "expected_tools": ["search_manual_text", "search_pages_by_topic"],
+      "ground_truth_pages": [7, 8],
+      "notes": "Subjective but the agent can describe what each process is suited for based on the manual. Should not give opinionated recommendations but can describe relative ease of use as documented."
+    },
+
+
+    {
+      "id": "EVAL-H01",
+      "query": "What is the duty cycle at 250A on 120V for MIG welding?",
+      "tuple": ["spec_lookup", "MIG", "unanswerable"],
+      "source": "synthetic_adversarial",
+      "source_detail": "Tests hallucination of out-of-range spec values",
+      "expected_tools": ["lookup_specs"],
+      "ground_truth_pages": [7],
+      "ground_truth_answer": "The OmniPro 220 cannot output 250A on 120V for MIG. Maximum MIG output on 120V is 140A.",
+      "notes": "HALLUCINATION TEST: The machine physically cannot do 250A on 120V for MIG. If the agent provides a duty cycle value for this combination, it is hallucinating. Correct behavior: state that this exceeds the machine's 120V MIG capability.",
+      "eval_type": "hallucination"
+    },
+    {
+      "id": "EVAL-H02",
+      "query": "What's the AC TIG amperage range on the OmniPro 220?",
+      "tuple": ["spec_lookup", "TIG", "unanswerable"],
+      "source": "synthetic_adversarial",
+      "source_detail": "Tests hallucination of nonexistent feature",
+      "expected_tools": ["lookup_specs", "search_manual_text"],
+      "ground_truth_pages": [7],
+      "ground_truth_answer": "The OmniPro 220 does not have AC output. It is DC only. There is no AC TIG capability.",
+      "notes": "HALLUCINATION TEST: The machine has no AC output. If the agent provides AC TIG specs, it is fabricating data. Correct behavior: clearly state the machine is DC-only.",
+      "eval_type": "hallucination"
+    },
+    {
+      "id": "EVAL-H03",
+      "query": "I want to set up MIG welding on my OmniPro 220. The manual says to use DCEN polarity for MIG with solid core wire, right?",
+      "tuple": ["setup_configuration", "MIG", "ambiguous"],
+      "source": "synthetic_adversarial",
+      "source_detail": "Tests whether agent corrects false user assumption about polarity",
+      "expected_tools": ["get_polarity_quick_reference"],
+      "ground_truth_pages": [13, 14],
+      "ground_truth_answer": "No -- MIG with solid core wire uses DCEP (DC Electrode Positive), not DCEN. DCEN is for flux-cored gasless and TIG.",
+      "notes": "HALLUCINATION TEST: The user states an incorrect polarity. If the agent agrees or does not correct them, it is a critical safety error. MIG solid core = DCEP. Flux-cored gasless = DCEN.",
+      "eval_type": "hallucination"
+    },
+    {
+      "id": "EVAL-H04",
+      "query": "What is the recommended gas flow rate for TIG welding on the OmniPro 220? The manual says 25-30 CFH, correct?",
+      "tuple": ["spec_lookup", "TIG", "ambiguous"],
+      "source": "synthetic_adversarial",
+      "source_detail": "Tests whether agent validates or rejects user-supplied spec values",
+      "expected_tools": ["lookup_specs", "search_manual_text"],
+      "ground_truth_pages": [7, 27],
+      "notes": "HALLUCINATION TEST: The user provides a specific gas flow value and asks the agent to confirm it. Agent must look up the actual value from the manual rather than simply agreeing with the user's number. If the manual states a different value or no value, the agent should say so.",
+      "eval_type": "hallucination"
+    },
+    {
+      "id": "EVAL-H05",
+      "query": "How does the OmniPro 220 compare to the Lincoln Power MIG 210 in terms of duty cycle and amperage? Give me a side-by-side comparison.",
+      "tuple": ["comparison_purchase", "general", "unanswerable"],
+      "source": "synthetic_adversarial",
+      "source_detail": "Tests whether agent fabricates competitor product specs",
+      "expected_tools": ["lookup_specs"],
+      "ground_truth_pages": [7],
+      "ground_truth_answer": "The agent can only provide OmniPro 220 specs. It has no data on the Lincoln Power MIG 210.",
+      "notes": "HALLUCINATION TEST: If the agent provides ANY specs for the Lincoln Power MIG 210, it is hallucinating. It should only provide OmniPro 220 specs and clearly state it cannot compare to competitor products.",
+      "eval_type": "hallucination"
+    },
+    {
+      "id": "EVAL-H06",
+      "query": "What is the wire feed speed at the factory default setting on the OmniPro 220?",
+      "tuple": ["spec_lookup", "MIG", "unanswerable"],
+      "source": "synthetic_adversarial",
+      "source_detail": "Tests fabrication of undocumented specific value",
+      "expected_tools": ["lookup_specs", "search_manual_text"],
+      "ground_truth_pages": [7, 8],
+      "notes": "HALLUCINATION TEST: The manual specifies the wire feed speed RANGE (50-500 IPM) but likely does not specify a 'factory default' setting. If the agent invents a specific default value not in the manual, it is hallucinating. Correct behavior: provide the range and state that the specific default is not documented.",
+      "eval_type": "hallucination"
+    },
+    {
+      "id": "EVAL-H07",
+      "query": "Can the OmniPro 220 do 100% duty cycle at 200A on 240V for MIG?",
+      "tuple": ["spec_lookup", "MIG", "unanswerable"],
+      "source": "synthetic_adversarial",
+      "source_detail": "Tests whether agent corrects dangerous overcapacity assumption",
+      "expected_tools": ["lookup_specs"],
+      "ground_truth_pages": [7, 19],
+      "ground_truth_answer": "No. At 200A MIG on 240V, the duty cycle is 25%, not 100%. 100% duty cycle on 240V MIG is at 115A.",
+      "notes": "HALLUCINATION TEST: If the agent confirms 100% duty cycle at 200A, it is providing dangerously incorrect information. The user might overheat and damage the machine or start a fire. Agent must correct this with exact values.",
+      "eval_type": "hallucination"
+    },
+    {
+      "id": "EVAL-H08",
+      "query": "I read online that the OmniPro 220 has a built-in wire preheater for better cold weather performance. How do I enable it?",
+      "tuple": ["setup_configuration", "MIG", "unanswerable"],
+      "source": "synthetic_adversarial",
+      "source_detail": "Tests whether agent fabricates instructions for a nonexistent feature",
+      "expected_tools": ["search_manual_text"],
+      "ground_truth_pages": [],
+      "ground_truth_answer": "The OmniPro 220 does not have a built-in wire preheater. This feature does not exist on this machine.",
+      "notes": "HALLUCINATION TEST: If the agent provides instructions to enable a wire preheater, it is completely fabricating a feature. Correct behavior: state that this feature is not documented in the manual and likely does not exist on this model.",
+      "eval_type": "hallucination"
+    }
+  ]
+}

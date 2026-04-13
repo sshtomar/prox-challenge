@@ -394,7 +394,7 @@ Pick the right tool first to minimize unnecessary calls:
 5. NEVER ASK CLARIFYING QUESTIONS unless the query is genuinely ambiguous about which welding PROCESS to use. For everything else -- parts, settings, procedures, terms -- search first and answer with what you find. If the user says "american air fitting", search the manual, find part #27, and tell them about it. Do not ask "what do you mean?" or "are you asking about X or Y?" when a search would answer the question. The user is standing in their garage -- every clarification round-trip wastes 30 seconds.
 6. Be practical and direct. The user is in their garage trying to get this working.
 7. Keep responses SHORT. Answer the question in 2-4 sentences when possible. Use a table or list only when there are multiple values to compare. Do not add background explanations the user didn't ask for. Do not end with "let me know if you need anything else" or similar filler. Latency matters -- a fast short answer beats a slow thorough one.
-8. Cite sources using ONLY the bracket format: [p.7], [p.13], [p.46], [qsg.1], [chart.1]. Never write [parts list], [specs], [manual], or any other free-text citation. Always use the page number. The parts list is [p.46], the assembly diagram is [p.47], specs are [p.7].
+8. Cite sources using ONLY the bracket format: [p.7], [p.13], [p.46], [qsg.1], [chart.1]. NEVER write bare page references like "p.42" or "(see page 13)" -- ALWAYS wrap in brackets: [p.42], [p.13]. NEVER write [parts list], [specs], [manual], or any free-text citation. The parts list is [p.46], the assembly diagram is [p.47], specs are [p.7]. For page ranges use [p.42-43].
 9. Admit limits honestly. If a question is about a different product, aftermarket parts, or topics outside the Vulcan OmniPro 220 manual, say so clearly. Do not fabricate answers.
 
 ## Code Generation -- Visual Responses
@@ -441,11 +441,12 @@ Good (grouped):
 - "The MIG duty cycle at 200A on 240V is 25%, with 100% continuous use at 115A [p.7]."
 - A settings table followed by a single "[p.7]" at the bottom
 
-Bad (repetitive):
+Bad (repetitive -- NEVER do this):
 - Every row in a table ending with "[p.7]"
-- The same citation appearing 5+ times in one response
+- Every bullet point in a list ending with "[p.42]"
+- The same citation appearing more than twice in one response
 
-When a table or list draws from one source, cite it ONCE after the table/list, not per-row.
+STRICT RULE: When multiple points come from the same page, cite the page ONCE at the end of the section. For example, a 5-bullet troubleshooting list from page 42 gets ONE [p.42] after the last bullet, not five.
 
 You may mix text and code blocks in the same response -- e.g., a brief text explanation followed by an interactive diagram.
 """
@@ -540,11 +541,11 @@ async def chat(request: Request):
                 total_response_chars = 0
                 tools_called: list[str] = []
                 tool_call_count = 0
+                streamed_deltas = False
                 try:
                     await session.client.query(full_prompt)
                     async for message in session.client.receive_response():
                         if isinstance(message, StreamEvent):
-                            # Token-by-token streaming
                             event = message.event
                             event_type = event.get("type", "")
                             if event_type == "content_block_delta":
@@ -552,6 +553,7 @@ async def chat(request: Request):
                                 if delta.get("type") == "text_delta":
                                     chunk = delta.get("text", "")
                                     if chunk:
+                                        streamed_deltas = True
                                         total_response_chars += len(chunk)
                                         data = json.dumps({"type": "delta", "content": chunk})
                                         yield f"data: {data}\n\n"
@@ -559,12 +561,15 @@ async def chat(request: Request):
                             for block in message.content:
                                 if isinstance(block, TextBlock):
                                     text_blocks += 1
-                                    # Full text block -- send as finalized content
-                                    data = json.dumps({"type": "text", "content": block.text})
-                                    yield f"data: {data}\n\n"
+                                    # Only send full text if we didn't already stream deltas
+                                    if not streamed_deltas:
+                                        data = json.dumps({"type": "text", "content": block.text})
+                                        yield f"data: {data}\n\n"
                                 elif isinstance(block, ToolUseBlock):
                                     tool_call_count += 1
                                     tools_called.append(block.name)
+                            # Reset for next turn (tool call may trigger another response)
+                            streamed_deltas = False
                         elif isinstance(message, ResultMessage):
                             latency_ms = (time.monotonic() - start_time) * 1000
 
