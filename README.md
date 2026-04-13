@@ -2,11 +2,43 @@
 
 Technical support agent for the Vulcan OmniPro 220 multiprocess welder. Built on the Claude Agent SDK with a FastAPI backend and a three-panel chat interface.
 
+The Vulcan OmniPro 220 is an industrial multiprocess welder -- 4 welders in 1 machine (MIG, Flux-Core, TIG, Stick), dual voltage (120V/240V), with a 48-page owner's manual of dense technical content. The target user is someone standing in their garage, phone propped on the workbench, trying to get their welder working. They need fast, correct answers grounded in the manual.
+
 **Live:** https://prox-welding-agent-production.up.railway.app
 
 ## Demo
 
 [![Watch the demo](docs/demo-thumbnail.jpg)](https://github.com/sshtomar/prox-challenge/raw/main/docs/prox-challenge.mp4)
+
+## Evaluation
+
+### How we built the dataset
+
+We started by reading real user questions on Reddit (r/Welding, r/harborfreight, r/metalworking, r/Generator) -- posts from actual Vulcan OmniPro 220 owners hitting real problems. We fed these threads into an agent for topic modelling to find natural dimensions of variation, then defined 3 axes targeting where a welding manual RAG agent is most likely to fail:
+
+**Dimension 1: Query type** (what the user needs) -- troubleshooting, spec_lookup, setup_configuration, process_guidance, comparison_purchase, safety, weld_diagnosis
+
+**Dimension 2: Welding process** (which process is relevant) -- MIG, flux_cored, TIG, stick, cross_process, general
+
+**Dimension 3: Difficulty** (how hard it is to answer correctly) -- direct_lookup, multi_hop, unanswerable, ambiguous
+
+Together these create 7 x 6 x 4 = 168 possible tuples. We selected 58 meaningful combinations.
+
+### Data sources
+
+| Source | Cases | How |
+|--------|-------|-----|
+| **Reddit (real users)** | 20 (34%) | Searched r/Welding, r/harborfreight for posts mentioning "Vulcan OmniPro 220". Each post adapted by preserving the original problem, assigning a tuple, identifying which tools and pages should be consulted, and noting what the agent should and should not do. Tagged with subreddit and username. |
+| **Synthetic (gap-filling)** | 30 (52%) | Reddit users rarely ask safety questions or direct spec lookups. Synthetic cases fill these gaps: each starts from a tuple, then gets a natural-sounding query a real user would ask. |
+| **Adversarial (hallucination)** | 8 (14%) | Cases designed to tempt the agent into fabricating information. All use programmatic pass/fail checks (regex), not LLM judging. Examples: "Duty cycle at 250A on 120V for MIG?" (out-of-range spec), "AC TIG amperage range?" (nonexistent feature), "Compare to Lincoln Power MIG 210" (competitor product). |
+
+### Running evals
+
+```bash
+python evals/run_eval.py 10                    # run 10 random cases
+python evals/run_eval.py --hallucination       # run hallucination suite
+python evals/run_eval.py --faithfulness        # run with LLM-as-judge scoring
+```
 
 ## Quick Start
 
@@ -99,36 +131,6 @@ Single FastAPI process on Railway. Loads 33MB knowledge base into memory at star
 ### Observability
 
 Every request and tool call instrumented with Pydantic Logfire (OpenTelemetry spans). Tracked metrics: latency_ms, tool_call_count, tools_called, tool_frequency, response_chars, BM25 top_score.
-
-## Evaluation
-
-### How we built the dataset
-
-We started by reading real user questions on Reddit (r/Welding, r/harborfreight, r/metalworking, r/Generator) -- posts from actual Vulcan OmniPro 220 owners hitting real problems. We fed these threads into an agent for topic modelling to find natural dimensions of variation, then defined 3 axes targeting where a welding manual RAG agent is most likely to fail:
-
-**Dimension 1: Query type** (what the user needs) -- troubleshooting, spec_lookup, setup_configuration, process_guidance, comparison_purchase, safety, weld_diagnosis
-
-**Dimension 2: Welding process** (which process is relevant) -- MIG, flux_cored, TIG, stick, cross_process, general
-
-**Dimension 3: Difficulty** (how hard it is to answer correctly) -- direct_lookup, multi_hop, unanswerable, ambiguous
-
-Together these create 7 x 6 x 4 = 168 possible tuples. We selected 58 meaningful combinations.
-
-### Data sources
-
-| Source | Cases | How |
-|--------|-------|-----|
-| **Reddit (real users)** | 20 (34%) | Searched r/Welding, r/harborfreight for posts mentioning "Vulcan OmniPro 220". Each post adapted by preserving the original problem, assigning a tuple, identifying which tools and pages should be consulted, and noting what the agent should and should not do. Tagged with subreddit and username. |
-| **Synthetic (gap-filling)** | 30 (52%) | Reddit users rarely ask safety questions or direct spec lookups. Synthetic cases fill these gaps: each starts from a tuple, then gets a natural-sounding query a real user would ask. |
-| **Adversarial (hallucination)** | 8 (14%) | Cases designed to tempt the agent into fabricating information. All use programmatic pass/fail checks (regex), not LLM judging. Examples: "Duty cycle at 250A on 120V for MIG?" (out-of-range spec), "AC TIG amperage range?" (nonexistent feature), "Compare to Lincoln Power MIG 210" (competitor product). |
-
-### Running evals
-
-```bash
-python evals/run_eval.py 10                    # run 10 random cases
-python evals/run_eval.py --hallucination       # run hallucination suite
-python evals/run_eval.py --faithfulness        # run with LLM-as-judge scoring
-```
 
 ## Project Structure
 
