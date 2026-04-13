@@ -102,13 +102,27 @@ Every request and tool call instrumented with Pydantic Logfire (OpenTelemetry sp
 
 ## Evaluation
 
-58 test cases across 3 dimensions:
+### How we built the dataset
 
-- **Query type** (7 values): troubleshooting, spec_lookup, setup_configuration, process_guidance, comparison_purchase, safety, weld_diagnosis
-- **Welding process** (6 values): MIG, flux_cored, TIG, stick, cross_process, general
-- **Difficulty** (4 values): direct_lookup, multi_hop, unanswerable, ambiguous
+We started by reading real user questions on Reddit (r/Welding, r/harborfreight, r/metalworking, r/Generator) -- posts from actual Vulcan OmniPro 220 owners hitting real problems. We fed these threads into an agent for topic modelling to find natural dimensions of variation, then defined 3 axes targeting where a welding manual RAG agent is most likely to fail:
 
-Data sources: 20 Reddit cases from real users (r/Welding, r/harborfreight), 30 synthetic gap-fillers, 8 adversarial hallucination traps.
+**Dimension 1: Query type** (what the user needs) -- troubleshooting, spec_lookup, setup_configuration, process_guidance, comparison_purchase, safety, weld_diagnosis
+
+**Dimension 2: Welding process** (which process is relevant) -- MIG, flux_cored, TIG, stick, cross_process, general
+
+**Dimension 3: Difficulty** (how hard it is to answer correctly) -- direct_lookup, multi_hop, unanswerable, ambiguous
+
+Together these create 7 x 6 x 4 = 168 possible tuples. We selected 58 meaningful combinations.
+
+### Data sources
+
+| Source | Cases | How |
+|--------|-------|-----|
+| **Reddit (real users)** | 20 (34%) | Searched r/Welding, r/harborfreight for posts mentioning "Vulcan OmniPro 220". Each post adapted by preserving the original problem, assigning a tuple, identifying which tools and pages should be consulted, and noting what the agent should and should not do. Tagged with subreddit and username. |
+| **Synthetic (gap-filling)** | 30 (52%) | Reddit users rarely ask safety questions or direct spec lookups. Synthetic cases fill these gaps: each starts from a tuple, then gets a natural-sounding query a real user would ask. |
+| **Adversarial (hallucination)** | 8 (14%) | Cases designed to tempt the agent into fabricating information. All use programmatic pass/fail checks (regex), not LLM judging. Examples: "Duty cycle at 250A on 120V for MIG?" (out-of-range spec), "AC TIG amperage range?" (nonexistent feature), "Compare to Lincoln Power MIG 210" (competitor product). |
+
+### Running evals
 
 ```bash
 python evals/run_eval.py 10                    # run 10 random cases
